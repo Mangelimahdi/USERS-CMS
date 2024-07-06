@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>داشبورد مدیریت کاربران</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
+</head>
+
+<body dir="rtl" class="d-flex flex-end position-relative">
+	<!-- modal and and edit -->
+	<!-- Add a "show" class to display the modal -->
+	<div class="modal position-fixed w-70 w-sm-100 d-none rounded-8">
+		<div class="modal-content w-100 rounded-8">
+			<div class="modal-header d-flex justify-between align-center">
+				<h3 class="modal-title mx-0">افزودن کاربر</h3>
+				<span class="modal-close mx-0 cursor-pointer">&times;</span>
+			</div>
+			<div class="modal-body">
+				<form class="form-user w-100">
+					<div class="input-group">
+						<input type="text" class="input-id w-100 rounded-8" placeholder="کد ملی*">
+					</div>
+					<div class="input-group d-flex align-center gap-16">
+						<input type="text" class="input-firstname w-100 rounded-8" placeholder="نام*">
+						<input type="text" class="input-lastname w-100 rounded-8" placeholder="نام خانوادگی*">
+					</div>
+					<div class="input-group d-flex align-center gap-16">
+						<input type="email" class="input-email w-100 rounded-8" placeholder="ایمیل*">
+						<input type="text" class="input-phone w-100 rounded-8" placeholder="شماره موبایل">
+						<select name="roles" id="select-role" class="select-role w-100 rounded-8">
+							<option value="empty">انتخاب سطح کاربر</option>
+							<option value="admin">مدیر</option>
+							<option value="employee">کارمند</option>ّ
+							<option value="support">پشتیبان</option>
+						</select>
+					</div>
+					<div class="input-group d-flex align-center gap-16 ">
+						<input type="text" class="input-userneme w-100 rounded-8" placeholder="نام کاربری*">
+						<input type="text" class="input-password w-100 rounded-8" placeholder="رمز عبور*">
+						<input type="text" class="input-password-confirm w-100 rounded-8" placeholder="تایید رمز عبور*">
+					</div>
+				</form>
+				<table class="table roles-table w-100 mx-0">
+					<thead>
+						<tr>
+							<th>مجوز</th>
+							<th>خواندن</th>
+							<th>نوشتن</th>
+							<th>حذف</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="roules">
+								<span class="role-name">مدیر</span>
+							</td>
+							<td class="role-read">
+								<input type="checkbox" value="read" class="cursor-pointer" id="admin-read">
+							</td>
+							<td class="role-write">
+								<input type="checkbox" value="write" class="cursor-pointer" id="admin-write">
+							</td>
+							<td class="role-delete">
+								<input type="checkbox" value="delete" class="cursor-pointer" id="admin-delete">
+							</td>
+						</tr>
+						<tr>
+							<td class="roules">
+								<span class="role-name">کارمند</span>
+							</td>
+							<td class="role-read">
+								<input type="checkbox" value="read" class="cursor-pointer" id="employee-read">
+							</td>
+							<td class="role-write">
+								<input type="checkbox" value="write" class="cursor-pointer" id="employee-write">
+							</td>
+							<td class="role-delete">
+								<input type="checkbox" value="delete" class="cursor-pointer" id="employee-delete">
+							</td>
+						</tr>
+						<tr>
+							<td class="roules">
+								<span class="role-name">پشتیبان</span>
+							</td>
+							<td class="role-read">
+								<input type="checkbox" value="read" class="cursor-pointer" id="support-read">
+							</td>
+							<td class="role-write">
+								<input type="checkbox" value="write" class="cursor-pointer" id="support-write">
+							</td>
+							<td class="role-delete">
+								<input type="checkbox" value="delete" class="cursor-pointer" id="support-delete">
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer d-flex align-center gap-16">
+				<button class="btn-primary btn-add cursor-pointer mx-0 cursor-pointer rounded-8">افزودن کاربر</button>
+				<button class="btn-close mx-0 cursor-pointer rounded-8">بستن</button>
+			</div>
+		</div>
+	</div>
+	<!-- modal delete -->
+	<div class="modal-delete position-fixed w-30 d-none rounded-8">
+		<div class="modal-content w-100 rounded-8">
+			<div class="modal-header d-flex justify-between align-center">
+				<h3 class="modal-title mx-0">حذف کاربر</h3>
+				<span class="modal-close cursor-pointer mx-0">&times;</span>
+			</div>
+			<div class="modal-body">
+				<h2 class="modal-text"></h2>
+			</div>
+			<div class="modal-footer  d-flex align-center gap-16">
+				<button class="btn-dunger btn-delete cursor-pointer mx-0 cursor-pointer rounded-8">بله</button>
+				<button class="btn-close mx-0 cursor-pointer rounded-8">خیر</button>
+			</div>
+		</div>
+	</div>
+	<div class="container w-80 mx-0 w-lg-100">
+		<header class="header-dashbord w-100 mx-0">
+			<div class="header-container">
+				<div class="header-top w-100 d-flex justify-between align-center justify-lg-center">
+					<div class="well-user mx-0 d-md-none">
+						<h3 class="title-header well-title"></h3>
+						<span class="sub-title">روز خوبی داشته باشی</span>
+					</div>
+					<div class="user-info mx-0 d-flex align-center position-relative">
+						<div class="user-icons position-relative">
+							<i class="fa fa-bell"></i>
+						</div>
+						<div class="user-profile">
+							<img src="images/mahdimangeli.png" alt="profile">
+						</div>
+						<div class="user-text">
+							<h3 class="user-title"></h3>
+							<span class="user-roul"></span>
+						</div>
+						<i class="fa fa-angle-down" id="show_menu"></i>
+						<div class="user-menu position-absolute d-none">
+							<ul class='user-menu-list'>
+								<li class='user-menu-list-item'>
+									<a class="user-menu-list-item-link d-flex align-center cursor-pointer"
+										id="edit-profile">
+										<i class="fa fa-edit mx-0"></i>
+										ویرایش اطلاعات/پروفایل
+									</a>
+								</li>
+								<li class='user-menu-list-item'>
+									<a class="user-menu-list-item-link d-flex align-center cursor-pointer">
+										<i class="fa fa-cog mx-0"></i>
+										تنظیمات حساب کاربری
+									</a>
+								</li>
+							</ul>
+							<ul class='user-menu-list'>
+								<li class='user-menu-list-item'>
+									<a class="user-menu-list-item-link d-flex align-center cursor-pointer"
+										id="exit-panel">
+										<i class="fa fa-power-off mx-0"></i>
+										خروج
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="header-sort">
+					<h2 class="blue-title header-title">داشبورد کاربران</h2>
+					<div class="sort-container d-flex align-center justify-lg-center flex-sm-col gap-16">
+						<div class="search-user w-60 w-xxl-50 w-xl-40 w-sm-100 mx-0 cursor-pointer position-relative">
+							<input type="search" placeholder="جستجو..." class="search-input w-100">
+							<i class="fa fa-search position-absolute"></i>
+						</div>
+						<button class="cursor-pointer btn-primary btn-add-user mx-lg-0">
+							<i class="fa fa-plus"></i>
+							افزودن کاربر
+						</button>
+						<span class="order-by cursor-pointer d-lg-none">
+							مرتب سازی
+							<i class="fa fa-angle-down"></i>
+						</span>
+						<span class="search-save cursor-pointer d-lg-none">
+							ذخیره جستجو
+							<i class="fa fa-angle-down"></i>
+						</span>
+						<span class="slider-icon cursor-pointer d-lg-none">
+							<i class="fa fa-sliders slide-icon"></i>
+						</span>
+					</div>
+				</div>
+			</div>
+		</header>
+		<main class="main w-100 ">
+			<!-- start side bar -->
+			<aside-site></aside-site>
+			<!-- end side bar -->
+			<!--start page main -->
+			<div class="container-list w-100 mx-0">
+				<div class="user-list">
+					<div class="title-container">
+						<h2 class="title-box users-title">لیست کاربران</h2>
+					</div>
+					<table class="table w-100 mx-0">
+						<thead>
+							<tr>
+								<th>نام</th>
+								<th>زمان ایجاد</th>
+								<th>نقش </th>
+								<th class="head-actions">اقدامات</th>
+							</tr>
+						</thead>
+						<tbody class="user-container">
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<!--end page main -->
+		</main>
+	</div>
+	<script type="module" src="js/module.js"></script>
+	<!-- Add a "show" class to display the background modal -->
+	<div class="modal-active position-fixed"></div>
+	<script src="js/script.js"></script>
+</body>
+
+</html>

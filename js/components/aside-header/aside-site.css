@@ -1,0 +1,71 @@
+@import url('../../../css/variable.css');
+
+.container-aside {
+  position: fixed;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--white-color);
+  transition: all 0.2s ease-in-out;
+  z-index: 1;
+}
+
+.user-logo {
+  width: 40px;
+  height: 40px;
+}
+
+.user-logo .logo-img {
+  border-radius: 100%;
+}
+
+.container-aside {
+  padding: 40px 56px 56px 32px
+}
+
+.menu-list {
+  margin-top: 56px;
+}
+
+.menu-list .list-item>* {
+  color: var(--text-color1);
+  margin-bottom: 32px;
+  transition: all 0.2s ease;
+}
+
+.menu-list .list-item.active>* {
+  color: var(--main-color);
+}
+
+.menu-list .list-item.active {
+  position: relative;
+}
+
+.menu-list .list-item.active::after {
+  position: absolute;
+  content: '';
+  background-color: var(--main-color);
+  width: 4px;
+  height: 38px;
+  display: block;
+  top: -4px;
+  left: -32px;
+}
+
+.menu-list .list-item:hover>* {
+  color: var(--text-color2);
+}
+
+.menu-list .list-item i {
+  margin-left: 16px;
+}
+
+.burger-menu {
+  position: absolute;
+  top: 25px;
+
+}
+
+.translate-x-0 {
+  transform: translateX(0) !important;
+}

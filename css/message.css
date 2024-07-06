@@ -1,0 +1,78 @@
+@import url('variable.css');
+
+#message-content {
+    background-color: var(--bg-main);
+    padding: 10px 20px;
+    border-radius: 8px;
+    resize: none;
+    font-size: 20px;
+}
+
+#message-receiver {
+    border: none;
+    padding: 10px;
+    border: none;
+    font-size: 18px;
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    outline: none;
+}
+
+#message-receiver:focus,
+#message-content:focus {
+    box-shadow: 4px 2px 4px 0 var(--main-color);
+}
+
+#send-message {
+    padding: 10px;
+    border-radius: 8px;
+}
+
+#message {
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+    margin-top: 40px;
+    padding: 20px;
+
+}
+
+.message-content {
+    background-color: var(--bg-main);
+    margin: 20px 0;
+}
+
+.message-sender,
+.message-time {
+    padding: 10px;
+
+}
+
+.message-sender {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.message-text {
+    padding: 20px;
+}
+
+.message-time {
+    border-top: 1px solid var(--border-color);
+}
+
+.message-action {
+    left: 0;
+    top: 20px;
+    border-radius: 5px;
+    background-color: var(--white-color);
+    box-shadow: 0 0px 4px 0 rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+.message-action span {
+    padding: 10px;
+    gap: 8px;
+    transition: all 0.2s ease-in-out;
+}
+
+.message-action span:hover {
+    background-color: var(--bg-main);
+}
