@@ -26,6 +26,14 @@ firstnameInput.addEventListener('keyup', (event) => {
         firstnameValid = true;
     }
 });
+const getBaseUrl = () => {
+    let hostName = window.location.hostname;
+    if (hostName === '127.0.0.1' || hostName === 'localhost') {
+        return ''
+    } else {
+        return "/USERS-CMS"
+    }
+}
 
 lastnameInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 3) {
@@ -102,6 +110,7 @@ const getAdminFromLocalStorage = () => {
 
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
+    const baseUrl = getBaseUrl();
     if (firstnameValid, lastnameValid, passwordValid, confirmPasswordValid, userNameValid) {
         if (passwordInput.value === confirmPasswordInput.value) {
             let newUser = {
@@ -114,7 +123,7 @@ submitBtn.addEventListener('click', (event) => {
             }
             owner.push(newUser);
             setAdminInLocalStorage(owner);
-            location.href = 'https://mangelimahdi.github.io/USERS-CMS/index.html';
+            location.href = `${baseUrl}/index.html`;
         }
         else {
             alert('رمز عبور با تکرار رمز تطابق ندارد');

@@ -280,21 +280,6 @@ const deleteModal = (adminId) => {
     adminID = adminId;
 };
 
-btnCloseModalElem?.addEventListener('click', closeModal);
-
-btnDeleteModalDeleteElem?.addEventListener('click', () => {
-    let getAdmins = getAdminsFromLocalStorage();
-    let mainIndexUser = getAdmins.findIndex((user) => {
-        return user.id === adminID;
-    });
-    if (mainIndexUser !== -1) {
-        getAdmins.splice(mainIndexUser, 1);
-        setAdminsToLocalStorage(admins);
-        generateData(admins);
-        closeDeleteModal();
-    }
-});
-
 // menu
 const showMenu = () => {
     userMenuElem.classList.remove('d-none');
@@ -310,6 +295,29 @@ const searchUsers = (event) => {
         return admin.nationalCode.includes(event.target.value) || admin.firstName.includes(event.target.value) || admin.lastName.includes(event.target.value);
     })
     generateData(filterUsers)
+}
+
+btnCloseModalElem?.addEventListener('click', closeModal);
+
+btnDeleteModalDeleteElem?.addEventListener('click', () => {
+    let getAdmins = getAdminsFromLocalStorage();
+    let mainIndexUser = getAdmins.findIndex((user) => {
+        return user.id === adminID;
+    });
+    if (mainIndexUser !== -1) {
+        getAdmins.splice(mainIndexUser, 1);
+        setAdminsToLocalStorage(admins);
+        generateData(admins);
+        closeDeleteModal();
+    }
+});
+const getBaseUrl = () => {
+    let hostName = window.location.hostname;
+    if (hostName === '127.0.0.1' || hostName === 'localhost') {
+        return ''
+    } else {
+        return "/USERS-CMS"
+    }
 }
 
 btnAddUserElem?.addEventListener('click', () => {
@@ -367,9 +375,8 @@ window.addEventListener('load', () => {
     let ownerId = localStorage.getItem('ownerID');
     let adminId = localStorage.getItem('adminID');
     let owner = JSON.parse(localStorage.getItem('owner'));
-    const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
-        ? ''
-        : '/USERS-CMS'
+    const baseUrl = getBaseUrl();
+   
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
         location.href = `${baseUrl}/register.html`;

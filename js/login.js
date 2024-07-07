@@ -32,13 +32,23 @@ passwordInput.addEventListener('keyup', (event) => {
         passwordMessage.classList.add('valid-message');
         passwordValid = true;
     }
-})
+});
+const getBaseUrl = () => {
+    let hostName = window.location.hostname;
+    if (hostName === '127.0.0.1' || hostName === 'localhost') {
+        return ''
+    } else {
+        return "/USERS-CMS"
+    }
+}
 let ownerArray = [];
 let adminsArray = [];
 let ownerID = null;
 let adminID = null;
 submitFormBtn.addEventListener('click', (event) => {
     event.preventDefault();
+    const baseUrl = getBaseUrl();
+
     let userNameInputValue = usernameInput.value;
     let passwordInputValue = passwordInput.value;
 
@@ -66,9 +76,13 @@ submitFormBtn.addEventListener('click', (event) => {
             if (mainOwner) {
                 ownerID = mainOwner.id;
                 localStorage.setItem('ownerID', ownerID);
-                location.href = 'https://mangelimahdi.github.io/USERS-CMS/index.html';
+                location.href = `${baseUrl}/index.html`;
                 clearInputs();
                 return;
+            }
+            else {
+                location.href = `${baseUrl}/register.html`;
+
             }
         }
         if (adminsArray) {
@@ -80,7 +94,7 @@ submitFormBtn.addEventListener('click', (event) => {
             if (mainAdmin) {
                 adminID = mainAdmin.id
                 localStorage.setItem('adminID', adminID);
-                location.href = 'http://127.0.0.1:5500/index.html';
+                location.href = location.href = `${baseUrl}/index.html`;
                 clearInputs();
                 return;
             }
