@@ -369,7 +369,7 @@ window.addEventListener('load', () => {
     let owner = JSON.parse(localStorage.getItem('owner'));
     const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
         ? ''
-        : '/USERS-CMS'
+        : 'USERS-CMS'
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
         location.href = `${baseUrl}/register.html`;
