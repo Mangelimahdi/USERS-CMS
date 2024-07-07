@@ -372,7 +372,7 @@ window.addEventListener('load', () => {
         : '/USERS-CMS'
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
-        // location.href = `${baseUrl}/register.html`;
+        location.href = `${baseUrl}/register.html`;
         return;
     }
 
