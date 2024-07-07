@@ -471,7 +471,7 @@ editProfile.addEventListener('click', () => {
 
 // sort btn
 orderByElem?.addEventListener('click', () => {
-    let admins = getAdminsFromLocalStorag();
+    let admins = getAdminsFromLocalStorage();
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     const sortedAdmins = sortAdmins(admins, sortOrder)
     generateData(sortedAdmins)
