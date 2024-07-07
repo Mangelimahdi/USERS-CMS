@@ -66,7 +66,7 @@ submitFormBtn.addEventListener('click', (event) => {
             if (mainOwner) {
                 ownerID = mainOwner.id;
                 localStorage.setItem('ownerID', ownerID);
-                location.href = 'http://127.0.0.1:5500/index.html';
+                location.href = 'https://mangelimahdi.github.io/USERS-CMS/index.html';
                 clearInputs();
                 return;
             }

@@ -114,7 +114,7 @@ submitBtn.addEventListener('click', (event) => {
             }
             owner.push(newUser);
             setAdminInLocalStorage(owner);
-            location.href = 'http://127.0.0.1:5500/index.html';
+            location.href = 'https://mangelimahdi.github.io/USERS-CMS/index.html';
         }
         else {
             alert('رمز عبور با تکرار رمز تطابق ندارد');
