@@ -369,7 +369,7 @@ window.addEventListener('load', () => {
     let owner = JSON.parse(localStorage.getItem('owner'));
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
-        location.href = '/register.html';
+        location.href = 'https://mangelimahdi.github.io/USERS-CMS/register.html';
         return;
     }
 
@@ -429,7 +429,7 @@ window.addEventListener('load', () => {
         });
         return;
     }
-    location.href = '/login.html';
+    location.href = 'https://mangelimahdi.github.io/USERS-CMS/login.html';
 });
 
 window.addEventListener('keyup', (event) => {
@@ -476,5 +476,5 @@ exitPanel.addEventListener('click', () => {
     if (adminId) {
         localStorage.removeItem('adminID')
     }
-    location.href = '/login.html';
+    location.href = 'https://mangelimahdi.github.io/USERS-CMS/login.html';
 })
