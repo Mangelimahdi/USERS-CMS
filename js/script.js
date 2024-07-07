@@ -367,9 +367,12 @@ window.addEventListener('load', () => {
     let ownerId = localStorage.getItem('ownerID');
     let adminId = localStorage.getItem('adminID');
     let owner = JSON.parse(localStorage.getItem('owner'));
+    const baseUrl = window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost'
+        ? ''
+        : '/USERS-CMS'
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
-        location.href = '/register.html';
+        location.href = `${baseUrl}/register.html`;
         return;
     }
 
@@ -432,7 +435,7 @@ window.addEventListener('load', () => {
         });
         return;
     }
-    location.href = '/login.html';
+    location.href = `${baseUrl}/login.html`;
 });
 
 window.addEventListener('keyup', (event) => {
@@ -474,10 +477,10 @@ exitPanel.addEventListener('click', () => {
     let adminId = localStorage.getItem('adminID');
 
     if (ownerId) {
-        localStorage.removeItem('ownerID')
+        localStorage.removeItem('ownerID');
     }
     if (adminId) {
-        localStorage.removeItem('adminID')
+        localStorage.removeItem('adminID');
     }
-    location.href = '/login.html';
+    location.href = `${baseUrl}/login.html`;
 })
