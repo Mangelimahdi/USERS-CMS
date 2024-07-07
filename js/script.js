@@ -429,7 +429,7 @@ window.addEventListener('load', () => {
         });
         return;
     }
-    location.href = 'http://127.0.0.1:5500/login.html';
+    location.href = '/login.html';
 });
 
 window.addEventListener('keyup', (event) => {
@@ -476,5 +476,5 @@ exitPanel.addEventListener('click', () => {
     if (adminId) {
         localStorage.removeItem('adminID')
     }
-    location.href = 'http://127.0.0.1:5500/login.html';
+    location.href = '/login.html';
 })
