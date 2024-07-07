@@ -32,19 +32,24 @@ let isDeleteAll = false;
 let documentID = null;
 
 const newDocument = () => {
-    let newDocObj = {
-        id: documents.length + 1,
-        title: docTitle.value,
-        date: docDate.value,
-        category: docSelectCategory.value,
-        content: docContent.value,
+    if (docTitle.value.trim() != '' && docDate.value.trim() != '' && docSelectCategory.value.trim() != 'selectcategory' && docContent.value.trim() != '') {
+
+        let newDocObj = {
+            id: documents.length + 1,
+            title: docTitle.value,
+            date: docDate.value,
+            category: docSelectCategory.value,
+            content: docContent.value,
+        }
+        documents.push(newDocObj);
+        setDocumentToLocalStorage(documents);
+        generageDocument(documents);
+        clearInputsDoc();
+        closeModalDoc();
+    } else {
+        alert('لطفا تمامی کادر ها را با دقت پر کنید!')
     }
 
-    documents.push(newDocObj);
-    setDocumentToLocalStorage(documents);
-    generageDocument(documents);
-    clearInputsDoc();
-    closeModalDoc();
 }
 
 const showModalDoc = (title, date, category, content) => {
@@ -167,12 +172,20 @@ const generageDocument = (documents) => {
         });
     }
 }
+
 const filterByDate = (event) => {
     let mainFilterDocument = documents.filter(document => {
-        console.log(event.target.value===document.date)
+        return event.target.value === document.date
     })
+    generageDocument(mainFilterDocument);
 }
 
+const filterByCategory = (event) => {
+    let mainFilterDocument = documents.filter(document => {
+        return document.category === event.target.value
+    });
+    generageDocument(mainFilterDocument)
+}
 const editModalDoc = (documentId, title, date, category, content) => {
     isEditDoc = true;
     documentID = documentId;
@@ -256,10 +269,11 @@ modalCloseArticleDoc.addEventListener('click', () => {
     closeModalArticle()
 });
 
-filterMonth.addEventListener('input', filterByDate());
+filterMonth.addEventListener('input', filterByDate);
+filterDocument.addEventListener('change', filterByCategory);
 
 window.addEventListener('load', () => {
     let allDocuments = getDocumentFromLocalStorage();
     generageDocument(allDocuments)
-    filterMonth.value = `1400-12-31`
+
 })
