@@ -470,7 +470,7 @@ editProfile.addEventListener('click', () => {
 });
 
 // sort btn
-orderByElem.addEventListener('click', () => {
+orderByElem?.addEventListener('click', () => {
     let admins = getAdminsFromLocalStorag();
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     const sortedAdmins = sortAdmins(admins, sortOrder)
