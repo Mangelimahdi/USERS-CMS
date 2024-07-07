@@ -14,7 +14,7 @@ const submitBtn = $.querySelector('#submit-btn');
 let firstnameValid, lastnameValid, passwordValid, confirmPasswordValid, userNameValid;
 firstnameInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 3) {
-        firstnameMessage.innerHTML = 'نام معتبر نیست';
+        firstnameMessage.innerHTML = 'نام حداقل 3 کاراکتر باشد';
         firstnameMessage.classList.remove('valid-message');
         firstnameMessage.classList.add('invalid-message');
         firstnameValid = false;
@@ -29,7 +29,7 @@ firstnameInput.addEventListener('keyup', (event) => {
 
 lastnameInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 3) {
-        lastnameMessage.innerHTML = 'نام خانوادگی معتبر نیست';
+        lastnameMessage.innerHTML = 'نام خانوادگی حداقل 3 کاراکتر باشد';
         lastnameMessage.classList.remove('valid-message');
         lastnameMessage.classList.add('invalid-message');
         lastnameValid = false;
@@ -43,7 +43,7 @@ lastnameInput.addEventListener('keyup', (event) => {
 
 passwordInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 8) {
-        passwordMessage.innerHTML = 'رمز عبور معتبر نیست';
+        passwordMessage.innerHTML = 'رمز عبور حداقل 8 کاراکتر باشد';
         passwordMessage.classList.remove('valid-message');
         passwordMessage.classList.add('invalid-message');
         passwordValid = false;
@@ -58,7 +58,7 @@ passwordInput.addEventListener('keyup', (event) => {
 
 confirmPasswordInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 8) {
-        confirmPasswordMessage.innerHTML = 'رمز عبور معتبر نیست';
+        confirmPasswordMessage.innerHTML = 'تکرار رمز عبور حداقل 8 کاراکتر باشد';
         confirmPasswordMessage.classList.remove('valid-message');
         confirmPasswordMessage.classList.add('invalid-message');
         confirmPasswordValid = false;
@@ -72,7 +72,7 @@ confirmPasswordInput.addEventListener('keyup', (event) => {
 })
 usernameInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 8) {
-        usernameMessage.innerHTML = 'نام کاربری معتبر نیست';
+        usernameMessage.innerHTML = 'نام کاربری حداقل 8 کاراکتر باشد';
         usernameMessage.classList.remove('valid-message');
         usernameMessage.classList.add('invalid-message');
         userNameValid = false;

@@ -459,7 +459,7 @@ button {
   border-bottom: 1px solid var(--color-head);
 }
 
-.modal-delete .modal-body, 
+.modal-delete .modal-body,
 .modal-article .modal-body {
   padding: 30px;
 }
@@ -468,9 +468,11 @@ button {
 .modal-title-doc {
   font-size: 17px;
 }
-.modal-article .modal-text{
+
+.modal-article .modal-text {
   color: var(--text-color1);
 }
+
 .modal-close {
   font-size: 24px;
   color: var(--title-color2);
@@ -529,17 +531,12 @@ option {
   padding: 20px;
 }
 
-.modal-footer .btn-user,
-.modal-footer .btn-close,
-.modal-footer .btn-docs {
-  font-size: 13px;
-  font-weight: bold;
-}
-
-.modal-footer .btn-user,
+.modal-footer .btn-add,
 .modal-footer .btn-delete,
 .modal-footer .btn-docs {
   padding: 5px 15px;
+  font-size: 13px;
+  font-weight: bold;
 }
 
 .modal-footer .btn-close {

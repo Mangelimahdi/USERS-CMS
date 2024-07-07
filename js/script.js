@@ -45,7 +45,7 @@ const setAdminsToLocalStorage = (usersArray) => {
     localStorage.setItem('admins', JSON.stringify(usersArray));
 }
 
-const getAdminsFromLocalStorag = () => {
+const getAdminsFromLocalStorage = () => {
     let getAdmins = localStorage.getItem('admins');
     if (getAdmins) {
         admins = JSON.parse(getAdmins);
@@ -259,7 +259,7 @@ const editModal = (adminId) => {
     adminID = adminId;
 
     if (adminID) {
-        let allAdmins = getAdminsFromLocalStorag();
+        let allAdmins = getAdminsFromLocalStorage();
         let mainUserAdmin = allAdmins.find(userAdmin => {
             return userAdmin.id === adminID;
         });
@@ -283,7 +283,7 @@ const deleteModal = (adminId) => {
 btnCloseModalElem?.addEventListener('click', closeModal);
 
 btnDeleteModalDeleteElem?.addEventListener('click', () => {
-    let getAdmins = getAdminsFromLocalStorag();
+    let getAdmins = getAdminsFromLocalStorage();
     let mainIndexUser = getAdmins.findIndex((user) => {
         return user.id === adminID;
     });
@@ -305,7 +305,7 @@ const closeMenu = () => {
 }
 
 const searchUsers = (event) => {
-    let admins = getAdminsFromLocalStorag();
+    let admins = getAdminsFromLocalStorage();
     let filterUsers = admins.filter((admin) => {
         return admin.nationalCode.includes(event.target.value) || admin.firstName.includes(event.target.value) || admin.lastName.includes(event.target.value);
     })
@@ -319,7 +319,7 @@ btnAddUserElem?.addEventListener('click', () => {
 
 btnAddOrEdit?.addEventListener('click', () => {
     if (isEdit) {
-        let allAdmins = getAdminsFromLocalStorag();
+        let allAdmins = getAdminsFromLocalStorage();
         let userIndex = allAdmins.findIndex(admin => admin.id === adminID);
         if (userIndex !== -1) {
             let updatedUser = collectUserData();
@@ -361,7 +361,7 @@ closeModalElem.addEventListener('click', () => {
 });
 
 window.addEventListener('load', () => {
-    const admins = getAdminsFromLocalStorag();
+    const admins = getAdminsFromLocalStorage();
     generateData(admins);
 
     let ownerId = localStorage.getItem('ownerID');
@@ -369,13 +369,15 @@ window.addEventListener('load', () => {
     let owner = JSON.parse(localStorage.getItem('owner'));
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
-        location.href = 'https://mangelimahdi.github.io/USERS-CMS/register.html';
+        location.href = '/register.html';
         return;
     }
 
     if (owner && ownerId) {
         let mainUserLogin = owner.filter(owner => owner.id === Number(ownerId));
-        editProfile.parentElement.remove();
+        if (editProfile && editProfile.parentElement) {
+            editProfile.parentElement.remove();
+        }
         mainUserLogin.forEach(owner => {
             titleHeader.innerHTML = `سلام ${owner.firstname}`
             userTitle.innerHTML = `${owner.firstname} ${owner.lastname}`;
@@ -386,6 +388,7 @@ window.addEventListener('load', () => {
         });
         return;
     }
+
     if (admins && adminId) {
         let actions;
         let actionsTrash;
@@ -429,7 +432,7 @@ window.addEventListener('load', () => {
         });
         return;
     }
-    location.href = 'https://mangelimahdi.github.io/USERS-CMS/login.html';
+    location.href = '/login.html';
 });
 
 window.addEventListener('keyup', (event) => {
@@ -442,7 +445,7 @@ window.addEventListener('keyup', (event) => {
 editProfile.addEventListener('click', () => {
     isEdit = true;
 
-    let allAdmins = getAdminsFromLocalStorag();
+    let allAdmins = getAdminsFromLocalStorage();
     let adminId = localStorage.getItem('adminID');
 
     if (adminId) {
@@ -476,5 +479,5 @@ exitPanel.addEventListener('click', () => {
     if (adminId) {
         localStorage.removeItem('adminID')
     }
-    location.href = 'https://mangelimahdi.github.io/USERS-CMS/login.html';
+    location.href = '/login.html';
 })
