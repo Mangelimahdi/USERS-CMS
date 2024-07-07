@@ -275,7 +275,7 @@ const deleteModal = (adminId) => {
     let mainFindUser = admins.find((user) => {
         return user.id === adminId;
     });
-    
+
     modalTextDeleteElem.innerHTML = `ایا از حذف ${mainFindUser.firstName} ${mainFindUser.lastName} مطمئن هستید؟`;
     adminID = adminId;
 };
@@ -369,7 +369,7 @@ window.addEventListener('load', () => {
     let owner = JSON.parse(localStorage.getItem('owner'));
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
-        location.href = 'http://127.0.0.1:5500/register.html';
+        location.href = 'http://127.0.0.1:5500/register.html' || '/register.html';
         return;
     }
 
