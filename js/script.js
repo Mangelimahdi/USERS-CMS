@@ -260,7 +260,7 @@ const generateData = (admins) => {
         } else {
             userContainer.innerHTML = '';
             admins.forEach(admin => {
-                if (location.pathname === '/index.html' || location.pathname === '/USERS-CMS/index.html') {
+                if (location.pathname === '/index.html' || location.pathname === '/USERS-CMS/index.html' || location.pathname === '/USERS-CMS/') {
                     userContainer.insertAdjacentHTML('beforeend', `
                          <tr>
                              <td class="user-info d-flex align-center">
