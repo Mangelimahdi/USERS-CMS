@@ -181,6 +181,7 @@ const clearInputs = () => {
     inputUserneme.value = '';
     inputPassword.value = '';
     inputPasswordConfirm.value = '';
+    passwordValid, confirmPasswordValid, userNameValid = false
 }
 // show and close modal add and edit
 const showModal = (nationalCode, firstName, lastName, email, phone, roule, username, password, permissions) => {

@@ -37,10 +37,26 @@
 							<option value="support">پشتیبان</option>
 						</select>
 					</div>
-					<div class="input-group d-flex align-center gap-16 ">
-						<input type="text" class="input-userneme w-100 rounded-8" placeholder="نام کاربری*">
-						<input type="text" class="input-password w-100 rounded-8" placeholder="رمز عبور*">
-						<input type="text" class="input-password-confirm w-100 rounded-8" placeholder="تایید رمز عبور*">
+					<div class="input-group d-flex align-center gap-16">
+						<div class="username w-100">
+							<input type="text" class="input-userneme w-100 rounded-8" placeholder="نام کاربری*">
+							<h3 id="username-message" class="message valid-message">
+								<!-- error message or success message -->
+							</h3>
+						</div>
+						<div class="password w-100">
+							<input type="text" class="input-password w-100 rounded-8" placeholder="رمز عبور*">
+							<h3 id="password-message" class="message valid-message">
+								<!-- error message or success message -->
+							</h3>
+						</div>
+						<div class="password-confirm w-100">
+							<input type="text" class="input-password-confirm w-100 rounded-8"
+								placeholder="تایید رمز عبور*">
+							<h3 id="confirm-password-message" class="message valid-message">
+								<!-- error message or success message -->
+							</h3>
+						</div>
 					</div>
 				</form>
 				<table class="table roles-table w-100 mx-0">
