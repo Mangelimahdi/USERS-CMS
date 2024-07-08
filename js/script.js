@@ -245,17 +245,8 @@ const closeDeleteModal = () => {
     modalActiveElem.classList.remove('show');
     modalActiveElem.classList.add('d-none');
 }
-const getBaseUrl = () => {
-    let hostName = window.location.hostname;
-    if (hostName === '127.0.0.1' || hostName === 'localhost') {
-        return ''
-    } else {
-        return "/USERS-CMS"
-    }
-}
 
 const generateData = (admins) => {
-    const baseUrl = getBaseUrl();
     let adminID = localStorage.getItem('adminID')
     if (userContainer) {
         if (admins.length === 0) {
@@ -269,7 +260,7 @@ const generateData = (admins) => {
         } else {
             userContainer.innerHTML = '';
             admins.forEach(admin => {
-                if (location.pathname === `${baseUrl}/index.html`) {
+                if (location.pathname === '/index.html'||location.pathname === '/USERS-CMS/index.html') {
                     userContainer.insertAdjacentHTML('beforeend', `
                          <tr>
                              <td class="user-info d-flex align-center">
@@ -394,6 +385,14 @@ const searchUsers = (event) => {
     generateData(filterUsers)
 }
 
+const getBaseUrl = () => {
+    let hostName = window.location.hostname;
+    if (hostName === '127.0.0.1' || hostName === 'localhost') {
+        return ''
+    } else {
+        return "/USERS-CMS"
+    }
+}
 
 btnCloseModalElem?.addEventListener('click', closeModal);
 
