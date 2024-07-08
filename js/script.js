@@ -236,7 +236,6 @@ const showDeleteModal = () => {
     modalDeleteElem.classList.remove('d-none');
     modalActiveElem.classList.add('show');
     modalActiveElem.classList.remove('d-none');
-
 }
 
 const closeDeleteModal = () => {
