@@ -593,16 +593,21 @@ option {
   color: var(--text-color2);
   font-weight: bold;
 }
+
 /* validation message */
-.message{
+.message {
   font-size: 13px;
+  font-weight: normal;
 }
+
 .valid-message {
   color: var(--green-color1);
 }
+
 .invalid-message {
   color: var(--red-color2);
 }
+
 /* filter and tools document page */
 .filter-by {
   margin-top: 23px;

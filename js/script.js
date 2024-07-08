@@ -343,7 +343,6 @@ const closeMenu = () => {
 const limitations = (admins, adminId) => {
     let actions;
     let actionsTrash;
-    console.log(admins, adminId)
     let mainUserLogin = admins.filter(admin => admin.id === Number(adminId));
     mainUserLogin.forEach(admin => {
         if (rolesTable) {
