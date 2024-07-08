@@ -57,6 +57,7 @@ submitFormBtn.addEventListener('click', (event) => {
 
     if (!ownerData && !adminData) {
         alert('اطلاعاتی برای برسی موجود نیست!');
+        location.href = `${baseUrl}/register.html`;
         return;
     }
     if (ownerData) {
@@ -79,10 +80,6 @@ submitFormBtn.addEventListener('click', (event) => {
                 location.href = `${baseUrl}/index.html`;
                 clearInputs();
                 return;
-            }
-            else {
-                location.href = `${baseUrl}/register.html`;
-
             }
         }
         if (adminsArray) {
