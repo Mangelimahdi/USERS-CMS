@@ -260,7 +260,7 @@ const generateData = (admins) => {
         } else {
             userContainer.innerHTML = '';
             admins.forEach(admin => {
-                if (location.pathname === '/index.html'||location.pathname === '/USERS-CMS/index.html') {
+                if (location.pathname === '/index.html' || location.pathname === '/USERS-CMS/index.html') {
                     userContainer.insertAdjacentHTML('beforeend', `
                          <tr>
                              <td class="user-info d-flex align-center">
@@ -366,7 +366,7 @@ const limitations = (admins, adminId) => {
 
                 actions = $.querySelectorAll('.action');
                 actions.forEach(action => {
-                    action.style.display = 'block';
+                    action.style.display = 'table-cell';
 
                     actionsTrash = action.querySelectorAll('.fa-trash-o');
                     actionsTrash.forEach(trash => {
