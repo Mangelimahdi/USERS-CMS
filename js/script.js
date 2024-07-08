@@ -23,8 +23,6 @@ const closeModalElem = $.querySelector('.modal-close');
 const btnCloseModalElem = $.querySelector('.modal .btn-close');
 const searchInputElem = $.querySelector('.search-input');
 const orderByElem = $.querySelector('.order-by');
-// const searchUserElem = $.querySelector('.search-user');
-// const searchSaveElem = $.querySelector('.search-save');
 const btnAddUserElem = $.querySelector('.btn-add-user');
 const showMenuElem = $.getElementById('show_menu');
 const userMenuElem = $.querySelector('.user-menu');
@@ -39,7 +37,7 @@ let admins = [];
 
 let adminID = null;
 let isEdit = false;
-let sortOrder = 'acs';
+let sortOrder = 'asc';
 
 const setAdminsToLocalStorage = (usersArray) => {
     localStorage.setItem('admins', JSON.stringify(usersArray));
@@ -67,7 +65,7 @@ const collectUserData = () => {
 
     if (inputPassword.value.trim() !== inputPasswordConfirm.value.trim()) {
         alert('رمز عبور تطابق ندارد');
-        return null
+        return null;
     }
     return {
         id: isEdit ? adminID : admins.length + 1,
@@ -142,7 +140,7 @@ const showModal = (nationalCode, firstName, lastName, email, phone, roule, usern
 
     if (isEdit) {
         modalTitleElem.innerHTML = 'ویرایش کاربر'
-        btnAdd.innerHTML = 'ویرایش کاربر'
+        btnAddOrEdit.innerHTML = 'ویرایش کاربر'
         inputId.value = nationalCode;
         inputFirstname.value = firstName;
         inputLastname.value = lastName;
@@ -197,6 +195,7 @@ const closeDeleteModal = () => {
 }
 
 const generateData = (admins) => {
+    let adminID = localStorage.getItem('adminID')
     if (userContainer) {
         if (admins.length === 0) {
             userContainer.innerHTML = ''
@@ -249,6 +248,7 @@ const generateData = (admins) => {
                  </tr>`);
                 }
             });
+            limitations(admins, adminID)
         }
     }
 }
@@ -288,13 +288,59 @@ const showMenu = () => {
 const closeMenu = () => {
     userMenuElem.classList.add('d-none');
 }
+const limitations = (admins, adminId) => {
+    let actions;
+    let actionsTrash;
+    console.log(admins, adminId)
+    let mainUserLogin = admins.filter(admin => admin.id === Number(adminId));
+    mainUserLogin.forEach(admin => {
+        if (rolesTable) {
+            rolesTable.style.display = 'none';
+        }
 
+        if (btnAddUserElem) {
+            if (admin.roule === 'employee' || admin.roule === 'support') {
+                btnAddUserElem.style.display = 'none';
+                $.querySelector('.head-actions').style.display = 'none';
+                searchInputElem.parentElement.classList.replace('w-60','w-70')
+                actions = $.querySelectorAll('.action');
+                actions.forEach(action => {
+                    action.style.display = 'none';
+                });
+            }
+            else {
+                btnAddUserElem.style.display = 'block';
+
+                $.querySelector('.head-actions').style.display = 'block';
+
+                actions = $.querySelectorAll('.action');
+                actions.forEach(action => {
+                    action.style.display = 'block';
+
+                    actionsTrash = action.querySelectorAll('.fa-trash-o');
+                    actionsTrash.forEach(trash => {
+                        trash.style.display = 'none';
+                    });
+                });
+            }
+        }
+    })
+}
 const searchUsers = (event) => {
     let admins = getAdminsFromLocalStorage();
     let filterUsers = admins.filter((admin) => {
         return admin.nationalCode.includes(event.target.value) || admin.firstName.includes(event.target.value) || admin.lastName.includes(event.target.value);
     })
     generateData(filterUsers)
+}
+
+const getBaseUrl = () => {
+    let hostName = window.location.hostname;
+    if (hostName === '127.0.0.1' || hostName === 'localhost') {
+        return ''
+    } else {
+        return "/USERS-CMS"
+    }
 }
 
 btnCloseModalElem?.addEventListener('click', closeModal);
@@ -304,6 +350,7 @@ btnDeleteModalDeleteElem?.addEventListener('click', () => {
     let mainIndexUser = getAdmins.findIndex((user) => {
         return user.id === adminID;
     });
+
     if (mainIndexUser !== -1) {
         getAdmins.splice(mainIndexUser, 1);
         setAdminsToLocalStorage(admins);
@@ -311,14 +358,7 @@ btnDeleteModalDeleteElem?.addEventListener('click', () => {
         closeDeleteModal();
     }
 });
-const getBaseUrl = () => {
-    let hostName = window.location.hostname;
-    if (hostName === '127.0.0.1' || hostName === 'localhost') {
-        return ''
-    } else {
-        return "/USERS-CMS"
-    }
-}
+
 
 btnAddUserElem?.addEventListener('click', () => {
     isEdit = false;
@@ -368,83 +408,6 @@ closeModalElem.addEventListener('click', () => {
     closeModal();
 });
 
-window.addEventListener('load', () => {
-    const admins = getAdminsFromLocalStorage();
-    generateData(admins);
-
-    let ownerId = localStorage.getItem('ownerID');
-    let adminId = localStorage.getItem('adminID');
-    let owner = JSON.parse(localStorage.getItem('owner'));
-    const baseUrl = getBaseUrl();
-   
-
-    if (!ownerId && (!owner || owner.length === 0) && !adminId) {
-        location.href = `${baseUrl}/register.html`;
-        return;
-    }
-
-    if (owner && ownerId) {
-        let mainUserLogin = owner.filter(owner => owner.id === Number(ownerId));
-        if (editProfile && editProfile.parentElement) {
-            editProfile.parentElement.remove();
-        }
-        mainUserLogin.forEach(owner => {
-            titleHeader.innerHTML = `سلام ${owner.firstname}`
-            userTitle.innerHTML = `${owner.firstname} ${owner.lastname}`;
-            userRoul.innerHTML = owner.roule === 'super-admin' ? 'مدیر محصول' :
-                owner.roule === 'admin' ? 'مدیر' :
-                    owner.roule === 'employee' ? 'کارمند' :
-                        owner.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
-        });
-        return;
-    }
-
-    if (admins && adminId) {
-        let actions;
-        let actionsTrash;
-
-        let mainUserLogin = admins.filter(admin => admin.id === Number(adminId));
-
-        mainUserLogin.forEach(admin => {
-            titleHeader.innerHTML = `سلام ${admin.firstName}`
-            userTitle.innerHTML = `${admin.firstName} ${admin.lastName}`;
-            userRoul.innerHTML = admin.roule === 'super-admin' ? 'مدیر محصول' : admin.roule === 'admin' ? 'مدیر' : admin.roule === 'employee' ? 'کارمند' : admin.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
-            if (rolesTable) {
-                rolesTable.style.display = 'none';
-            }
-            if (btnAddUserElem) {
-                if (admin.roule === 'employee' || admin.roule === 'support') {
-                    btnAddUserElem.style.display = 'none';
-                    $.querySelector('.head-actions').style.display = 'none';
-
-                    actions = $.querySelectorAll('.action');
-                    actions.forEach(action => {
-                        action.style.display = 'none';
-                    });
-                }
-                else {
-                    btnAddUserElem.style.display = 'block';
-
-                    $.querySelector('.head-actions').style.display = 'block';
-
-                    actions = $.querySelectorAll('.action');
-                    actions.forEach(action => {
-                        action.style.display = 'block';
-
-                        actionsTrash = action.querySelectorAll('.fa-trash-o');
-                        actionsTrash.forEach(trash => {
-                            action.style.display = 'block';
-                            trash.style.display = 'none';
-                        });
-                    });
-                }
-            }
-        });
-        return;
-    }
-    location.href = `${baseUrl}/login.html`;
-});
-
 window.addEventListener('keyup', (event) => {
     if (event.code === 'Escape') {
         closeModal();
@@ -474,7 +437,7 @@ orderByElem?.addEventListener('click', () => {
     let admins = getAdminsFromLocalStorage();
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
     const sortedAdmins = sortAdmins(admins, sortOrder)
-    generateData(sortedAdmins)
+    generateData(sortedAdmins);
 });
 
 searchInputElem.addEventListener('input', searchUsers);
@@ -482,6 +445,7 @@ searchInputElem.addEventListener('input', searchUsers);
 exitPanel.addEventListener('click', () => {
     let ownerId = localStorage.getItem('ownerID');
     let adminId = localStorage.getItem('adminID');
+    const baseUrl = getBaseUrl();
 
     if (ownerId) {
         localStorage.removeItem('ownerID');
@@ -491,3 +455,48 @@ exitPanel.addEventListener('click', () => {
     }
     location.href = `${baseUrl}/login.html`;
 })
+
+
+window.addEventListener('load', () => {
+    const admins = getAdminsFromLocalStorage();
+    generateData(admins);
+
+    let ownerId = localStorage.getItem('ownerID');
+    let adminId = localStorage.getItem('adminID');
+    let owner = JSON.parse(localStorage.getItem('owner'));
+    const baseUrl = getBaseUrl();
+
+    if (!ownerId && (!owner || owner.length === 0) && !adminId) {
+        location.href = `${baseUrl}/register.html`;
+        return;
+    }
+
+    if (owner && ownerId) {
+        let mainUserLogin = owner.filter(owner => owner.id === Number(ownerId));
+        if (editProfile && editProfile.parentElement) {
+            editProfile.parentElement.remove();
+        }
+        mainUserLogin.forEach(owner => {
+            titleHeader.innerHTML = `سلام ${owner.firstname}`
+            userTitle.innerHTML = `${owner.firstname} ${owner.lastname}`;
+            userRoul.innerHTML = owner.roule === 'super-admin' ? 'مدیر محصول' :
+                owner.roule === 'admin' ? 'مدیر' :
+                    owner.roule === 'employee' ? 'کارمند' :
+                        owner.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
+        });
+        return;
+    }
+
+    if (admins && adminId) {
+        let mainUserLogin = admins.filter(admin => admin.id === Number(adminId));
+
+        mainUserLogin.forEach(admin => {
+            titleHeader.innerHTML = `سلام ${admin.firstName}`
+            userTitle.innerHTML = `${admin.firstName} ${admin.lastName}`;
+            userRoul.innerHTML = admin.roule === 'super-admin' ? 'مدیر محصول' : admin.roule === 'admin' ? 'مدیر' : admin.roule === 'employee' ? 'کارمند' : admin.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
+        });
+        limitations(admins, adminId);
+        return;
+    }
+    location.href = `${baseUrl}/login.html`;
+});

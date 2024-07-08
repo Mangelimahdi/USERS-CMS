@@ -97,7 +97,6 @@ const displayMessages = (messages) => {
 }
 
 const showBox = (el) => {
-    console.log(el.nextElementSibling)
     el.nextElementSibling.classList.remove('d-none');
     document.addEventListener('click', (event) => {
         if (event.target.tagName != 'I' || event.target != el) {
@@ -137,15 +136,15 @@ sendMessageElem.addEventListener('click', () => {
 searchMessageElem.addEventListener('input', (event) => {
     let messages = getMessageFromLocalStorage();
 
-    let mainFilterMessage = messages.filter(message=>{
-       return message.content.includes(event.target.value);
+    let mainFilterMessage = messages.filter(message => {
+        return message.content.includes(event.target.value);
     });
 
     displayMessages(mainFilterMessage)
 });
 window.addEventListener('load', () => {
     const messages = getMessageFromLocalStorage();
-    displayMessages(messages)
+    displayMessages(messages);
     generateUserOptions();
 });
 

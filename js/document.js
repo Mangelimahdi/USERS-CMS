@@ -8,6 +8,7 @@ const deleteAllDoc = document.querySelector('.delete-all-doc');
 const filterMonth = document.querySelector('#filter-month')
 const filterDocument = document.querySelector('#filter-document')
 const btnAddDoc = document.querySelector('.btn-add-doc');
+const searchInputDoc = document.querySelector('.search-input')
 // select modal
 const modalActiveDoc = document.querySelector('.modal-active');
 // select modal add or edit
@@ -52,6 +53,15 @@ const newDocument = () => {
 
 }
 
+const clearInputsDoc = () => {
+    btnAddOrEditDoc.value = '';
+    docTitle.value = '';
+    docDate.value = '';
+    docSelectCategory.value = 'selectcategory';
+    docContent.value = '';
+}
+
+// show and close modal
 const showModalDoc = (title, date, category, content) => {
     modalDocElem.classList.add('show');
     modalDocElem.style.display = 'block';
@@ -71,15 +81,6 @@ const showModalDoc = (title, date, category, content) => {
     }
 }
 
-const clearInputsDoc = () => {
-    btnAddOrEditDoc.value = '';
-    docTitle.value = '';
-    docDate.value = '';
-    docSelectCategory.value = 'selectcategory';
-    docContent.value = '';
-}
-// show and close modal
-
 const showDeleteModalDoc = () => {
     modalDeleteDoc.classList.add('show');
     modalDeleteDoc.classList.remove('d-none');
@@ -94,7 +95,6 @@ const showDeleteModalDoc = () => {
 
         if (mainFindDocument) {
             modalTextDeleteDoc.innerHTML = `ایا از حذف مقاله ${mainFindDocument.title}`;
-            documentID = documentId;
         }
     }
 }
@@ -124,6 +124,7 @@ const closeModalArticle = () => {
     modalActiveDoc.classList.remove('show');
     modalActiveDoc.classList.add('d-none');
 }
+
 const setDocumentToLocalStorage = (arrayDoc) => {
     localStorage.setItem('document', JSON.stringify(arrayDoc));
 }
@@ -173,6 +174,13 @@ const generageDocument = (documents) => {
     }
 }
 
+const searchDocument = (event) => {
+    let filterDocuments = documents.filter(document => {
+        return document.title.includes(event.target.value)
+    });
+    generageDocument(filterDocuments)
+}
+
 const filterByDate = (event) => {
     let mainFilterDocument = documents.filter(document => {
         return event.target.value === document.date
@@ -203,10 +211,9 @@ const showMore = (documentId) => {
     let mainFilterDocument = documents.filter(document => {
         return document.id === documentId
     });
-    console.log(mainFilterDocument)
     if (mainFilterDocument) {
-        modalTitleArticleDoc.innerHTML = mainFilterDocument[0].title
-        modalTextArticleDoc.innerHTML = mainFilterDocument[0].content
+        modalTitleArticleDoc.innerHTML = mainFilterDocument[0].title;
+        modalTextArticleDoc.innerHTML = mainFilterDocument[0].content;
     }
 }
 
@@ -238,11 +245,11 @@ btnAddOrEditDoc.addEventListener('click', () => {
                 document.title = docTitle.value;
                 document.date = docDate.value;
                 document.category = docSelectCategory.value;
-                document.content = docContent.value
+                document.content = docContent.value;
             }
         });
         setDocumentToLocalStorage(allDocuments);
-        generageDocument(allDocuments)
+        generageDocument(allDocuments);
         clearInputsDoc();
         closeModalDoc();
         isEditDoc = false;
@@ -262,15 +269,16 @@ deleteAllDoc.addEventListener('click', () => {
 });
 
 modalCloseBtnArticleDoc.addEventListener('click', () => {
-    closeModalArticle()
+    closeModalArticle();
 });
 
 modalCloseArticleDoc.addEventListener('click', () => {
-    closeModalArticle()
+    closeModalArticle();
 });
 
 filterMonth.addEventListener('input', filterByDate);
 filterDocument.addEventListener('change', filterByCategory);
+searchInputDoc.addEventListener('input', searchDocument);
 
 window.addEventListener('load', () => {
     let allDocuments = getDocumentFromLocalStorage();
