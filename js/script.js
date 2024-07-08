@@ -377,6 +377,7 @@ const limitations = (admins, adminId) => {
         }
     })
 }
+
 const searchUsers = (event) => {
     let admins = getAdminsFromLocalStorage();
     let filterUsers = admins.filter((admin) => {
