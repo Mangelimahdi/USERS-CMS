@@ -31,6 +31,11 @@ const closeModalDeleteElem = $.querySelector('.modal-delete .modal-close');
 const btnCloseModalDeleteElem = $.querySelector('.modal-delete .btn-close');
 const btnDeleteModalDeleteElem = $.querySelector('.modal-delete .btn-delete');
 const modalTextDeleteElem = $.querySelector('.modal-delete .modal-text');
+const firstnameMessage = $.querySelector('#firstname-message');
+const lastnameMessage = $.querySelector('#lastname-message');
+const passwordMessage = $.querySelector('#password-message');
+const confirmPasswordMessage = $.querySelector('#confirm-password-message');
+const usernameMessage = $.querySelector('#username-message');
 const rolesTable = $.querySelector('.roles-table');
 
 let admins = [];
@@ -53,7 +58,51 @@ const getAdminsFromLocalStorage = () => {
     }
     return admins;
 }
+let passwordValid, confirmPasswordValid, userNameValid;
 
+inputPassword?.addEventListener('keyup', (event) => {
+    if (event.target.value.length < 8) {
+        passwordMessage.innerHTML = 'رمز عبور حداقل 8 کاراکتر باشد';
+        passwordMessage.classList.remove('valid-message');
+        passwordMessage.classList.add('invalid-message');
+        passwordValid = false;
+    }
+    else {
+        passwordMessage.innerHTML = 'رمز عبور معتبر است';
+        passwordMessage.classList.remove('invalid-message');
+        passwordMessage.classList.add('valid-message');
+        passwordValid = true;
+    }
+})
+
+inputPasswordConfirm?.addEventListener('keyup', (event) => {
+    if (event.target.value.length < 8) {
+        confirmPasswordMessage.innerHTML = 'تکرار رمز عبور حداقل 8 کاراکتر باشد';
+        confirmPasswordMessage.classList.remove('valid-message');
+        confirmPasswordMessage.classList.add('invalid-message');
+        confirmPasswordValid = false;
+    }
+    else {
+        confirmPasswordMessage.innerHTML = 'رمز عبور معتبر است';
+        confirmPasswordMessage.classList.remove('invalid-message');
+        confirmPasswordMessage.classList.add('valid-message');
+        confirmPasswordValid = true;
+    }
+})
+inputUserneme?.addEventListener('keyup', (event) => {
+    if (event.target.value.length < 8) {
+        usernameMessage.innerHTML = 'نام کاربری حداقل 8 کاراکتر باشد';
+        usernameMessage.classList.remove('valid-message');
+        usernameMessage.classList.add('invalid-message');
+        userNameValid = false;
+    }
+    else {
+        usernameMessage.innerHTML = 'نام کاربری معتبر است';
+        usernameMessage.classList.remove('invalid-message');
+        usernameMessage.classList.add('valid-message');
+        userNameValid = true;
+    }
+});
 const collectUserData = () => {
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     let now = new Date().toLocaleDateString('fa-IR', options);
@@ -67,33 +116,35 @@ const collectUserData = () => {
         alert('رمز عبور تطابق ندارد');
         return null;
     }
-    return {
-        id: isEdit ? adminID : admins.length + 1,
-        nationalCode: inputId.value.trim(),
-        firstName: inputFirstname.value.trim(),
-        lastName: inputLastname.value.trim(),
-        email: inputEmail.value.trim(),
-        phone: inputPhone.value.trim(),
-        roule: selectRole.value,
-        username: inputUserneme.value.trim(),
-        password: inputPassword.value.trim(),
-        date: now,
-        permissions: {
-            'admin': {
-                read: $.getElementById('admin-read').checked,
-                write: $.getElementById('admin-write').checked,
-                delete: $.getElementById('admin-delete').checked,
-            },
-            'employee': {
-                read: $.getElementById('employee-read').checked,
-                write: $.getElementById('employee-write').checked,
-                delete: $.getElementById('employee-delete').checked,
-            },
-            'support': {
-                read: $.getElementById('support-read').checked,
-                write: $.getElementById('support-write').checked,
-                delete: $.getElementById('support-delete').checked,
-            },
+    if (passwordValid && confirmPasswordValid && userNameValid) {
+        return {
+            id: isEdit ? adminID : admins.length + 1,
+            nationalCode: inputId.value.trim(),
+            firstName: inputFirstname.value.trim(),
+            lastName: inputLastname.value.trim(),
+            email: inputEmail.value.trim(),
+            phone: inputPhone.value.trim(),
+            roule: selectRole.value,
+            username: inputUserneme.value.trim(),
+            password: inputPassword.value.trim(),
+            date: now,
+            permissions: {
+                'admin': {
+                    read: $.getElementById('admin-read').checked,
+                    write: $.getElementById('admin-write').checked,
+                    delete: $.getElementById('admin-delete').checked,
+                },
+                'employee': {
+                    read: $.getElementById('employee-read').checked,
+                    write: $.getElementById('employee-write').checked,
+                    delete: $.getElementById('employee-delete').checked,
+                },
+                'support': {
+                    read: $.getElementById('support-read').checked,
+                    write: $.getElementById('support-write').checked,
+                    delete: $.getElementById('support-delete').checked,
+                },
+            }
         }
     }
 };
@@ -302,7 +353,7 @@ const limitations = (admins, adminId) => {
             if (admin.roule === 'employee' || admin.roule === 'support') {
                 btnAddUserElem.style.display = 'none';
                 $.querySelector('.head-actions').style.display = 'none';
-                searchInputElem.parentElement.classList.replace('w-60','w-70')
+                searchInputElem.parentElement.classList.replace('w-60', 'w-70')
                 actions = $.querySelectorAll('.action');
                 actions.forEach(action => {
                     action.style.display = 'none';

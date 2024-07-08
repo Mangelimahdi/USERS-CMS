@@ -2,16 +2,16 @@
 <html lang="fa">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>داشبورد مدیریت کاربران</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="css/style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>داشبورد مدیریت کاربران</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="css/style.css">
 </head>
 
 <body dir="rtl" class="d-flex flex-end position-relative">
-    <!-- modal user -->
-    <!-- Add a "show" class to display the modal -->
+	<!-- modal user -->
+	<!-- Add a "show" class to display the modal -->
 	<div class="modal position-fixed w-70 w-sm-100 d-none rounded-8">
 		<div class="modal-content w-100 rounded-8">
 			<div class="modal-header d-flex justify-between align-center">
@@ -32,16 +32,31 @@
 						<input type="text" class="input-phone w-100 rounded-8" placeholder="شماره موبایل">
 						<select name="roles" id="select-role" class="select-role w-100 rounded-8">
 							<option value="empty">انتخاب سطح کاربر</option>
-							<option value="مدیر محصول">مدیر محصول</option>
 							<option value="مدیر">مدیر</option>
 							<option value="کارمند">کارمند</option>ّ
 							<option value="پشتیبان">پشتیبان</option>
 						</select>
 					</div>
 					<div class="input-group d-flex align-center gap-16">
-						<input type="text" class="input-userneme w-100 rounded-8" placeholder="نام کاربری*">
-						<input type="text" class="input-password w-100 rounded-8" placeholder="رمز عبور*">
-						<input type="text" class="input-password-confirm w-100 rounded-8" placeholder="تایید رمز عبور*">
+						<div class="username w-100">
+							<input type="text" class="input-userneme w-100 rounded-8" placeholder="نام کاربری*">
+							<h3 id="username-message" class="message valid-message">
+								<!-- error message or success message -->
+							</h3>
+						</div>
+						<div class="password w-100">
+							<input type="text" class="input-password w-100 rounded-8" placeholder="رمز عبور*">
+							<h3 id="password-message" class="message valid-message">
+								<!-- error message or success message -->
+							</h3>
+						</div>
+						<div class="password-confirm w-100">
+							<input type="text" class="input-password-confirm w-100 rounded-8"
+								placeholder="تایید رمز عبور*">
+							<h3 id="confirm-password-message" class="message valid-message">
+								<!-- error message or success message -->
+							</h3>
+						</div>
 					</div>
 				</form>
 				<table class="table roles-table w-100 mx-0">
@@ -54,20 +69,6 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td class="roules">
-								<span class="role-name">مدیر محصول</span>
-							</td>
-							<td class="role-read">
-								<input type="checkbox" value="read" class="cursor-pointer">
-							</td>
-							<td class="role-write">
-								<input type="checkbox" value="write" class="cursor-pointer">
-							</td>
-							<td class="role-delete">
-								<input type="checkbox" value="delete" class="cursor-pointer">
-							</td>
-						</tr>
 						<tr>
 							<td class="roules">
 								<span class="role-name">مدیر</span>
@@ -135,8 +136,8 @@
 			</div>
 		</div>
 	</div>
-    <div class="container w-80 mx-0 w-lg-100">
-        <header class="header-dashbord w-100 mx-0 ">
+	<div class="container w-80 mx-0 w-lg-100">
+		<header class="header-dashbord w-100 mx-0 ">
 			<div class="header-container">
 				<div class="header-top w-100 d-flex justify-between align-center justify-lg-center">
 					<div class="well-user mx-0 d-md-none">
@@ -148,7 +149,7 @@
 							<i class="fa fa-bell"></i>
 						</div>
 						<div class="user-profile">
-							<img src="images/mahdimangeli.png" alt="profile">
+							<img src="images/userlogo.png" alt="profile">
 						</div>
 						<div class="user-text">
 							<h3 class="user-title">مهدی منگلی</h3>
@@ -158,7 +159,8 @@
 						<div class="user-menu position-absolute d-none rounded-8">
 							<ul class='user-menu-list'>
 								<li class='user-menu-list-item'>
-									<a class="user-menu-list-item-link d-flex align-center cursor-pointer" id="edit-profile">
+									<a class="user-menu-list-item-link d-flex align-center cursor-pointer"
+										id="edit-profile">
 										<i class="fa fa-edit mx-0"></i>
 										ویرایش اطلاعات/پروفایل
 									</a>
@@ -172,7 +174,8 @@
 							</ul>
 							<ul class='user-menu-list'>
 								<li class='user-menu-list-item'>
-									<a class="user-menu-list-item-link d-flex align-center cursor-pointer" id="exit-panel">
+									<a class="user-menu-list-item-link d-flex align-center cursor-pointer"
+										id="exit-panel">
 										<i class="fa fa-power-off mx-0"></i>
 										خروج
 									</a>
@@ -207,66 +210,67 @@
 				</div>
 			</div>
 		</header>
-        <!-- <header-site>
+		<!-- <header-site>
             <h2 class="blue-title header-title" slot="title">کاربران</h2>
         </header-site> -->
-        <main class="main w-100">
-            <!-- start side bar -->
-            <aside-site></aside-site>
-            <!-- end side bar -->
-            <!--start page main -->
-            <!-- info box -->
-            <di class="container-boxs d-flex align-center flex-sm-col w-100 gap-16">
-                <div class="box rounded-8">
-                    <span class="box-title">مدیر محصول</span>
-                    <p class="box-count owner-count">687</p>
-                </div>
-                <div class="box rounded-8">
-                    <span class="box-title">مدیر</span>
-                    <p class="box-count admin-count">100</p>
-                </div>
-                <div class="box rounded-8">
-                    <span class="box-title">کارمند</span>
-                    <p class="box-count employee-count">200</p>
-                </div>
-                <div class="box rounded-8">
-                    <span class="box-title">پشتیبان</span>
-                    <p class="box-count support-count">50</p>
-                </div>
-            </di>
-            <!-- user box -->
-            <div class="container-list w-100 mx-0">
-                <div class="user-list">
-                    <div class="title-container">
-                        <h2 class="title-box users-title">لیست کاربران</h2>
-                    </div>
-                    <table class="table w-100 mx-0">
-                        <thead>
-                            <tr>
-                                <th>نام</th>
-                                <th>کد ملی</th>
-                                <th>زمان</th>
-                                <th class="head-actions">اقدامات</th>
-                            </tr>
-                        </thead>
-                        <tbody class="user-container">
-                            <tr>
+		<main class="main w-100">
+			<!-- start side bar -->
+			<aside-site></aside-site>
+			<!-- end side bar -->
+			<!--start page main -->
+			<!-- info box -->
+			<di class="container-boxs d-flex align-center flex-sm-col w-100 gap-16">
+				<div class="box rounded-8">
+					<span class="box-title">مدیر محصول</span>
+					<p class="box-count owner-count">687</p>
+				</div>
+				<div class="box rounded-8">
+					<span class="box-title">مدیر</span>
+					<p class="box-count admin-count">100</p>
+				</div>
+				<div class="box rounded-8">
+					<span class="box-title">کارمند</span>
+					<p class="box-count employee-count">200</p>
+				</div>
+				<div class="box rounded-8">
+					<span class="box-title">پشتیبان</span>
+					<p class="box-count support-count">50</p>
+				</div>
+			</di>
+			<!-- user box -->
+			<div class="container-list w-100 mx-0">
+				<div class="user-list">
+					<div class="title-container">
+						<h2 class="title-box users-title">لیست کاربران</h2>
+					</div>
+					<table class="table w-100 mx-0">
+						<thead>
+							<tr>
+								<th>نام</th>
+								<th>کد ملی</th>
+								<th>زمان</th>
+								<th class="head-actions">اقدامات</th>
+							</tr>
+						</thead>
+						<tbody class="user-container">
+							<tr>
 								<td colspan="4">
 									<h1 class="users-empty text-center w-100">کاربری وجود ندارد</h1>
 								</td>
 							</tr>
-                        </tbody>
-                    </table>
+						</tbody>
+					</table>
 
-                </div>
-            </div>
-            <!--end page main -->
-        </main>
-    </div>
-    <script type="module" src="js/module.js"></script>
-    <div class="modal-active position-fixed d-none"></div>
-    <script src="js/script.js"></script>
-    <!-- Add a "show" class to display the background modal -->
+				</div>
+			</div>
+			<!--end page main -->
+		</main>
+	</div>
+	<div class="modal-active position-fixed d-none"></div>
+	<script type="module" src="js/module.js"></script>
+	<script src="js/users.js"></script>
+	<script src="js/script.js"></script>
+	<!-- Add a "show" class to display the background modal -->
 </body>
 
 </html>
