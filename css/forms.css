@@ -2,10 +2,10 @@
 
 /* reset autofill in browsers */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
-input:-webkit-autofill:focus, 
-input:-webkit-autofill:active{
-    -webkit-box-shadow: 0 0 0 30px white inset !important; 
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
 .input-group {
@@ -18,6 +18,16 @@ input:-webkit-autofill:active{
     border: 1px solid var(--primary-color);
     padding: 0 12px;
 }
+
+.input-group-choose {
+    position: relative;
+    border: 1px solid var(--primary-color);
+    padding: 12px;
+    margin: 10px auto;
+    height: 200px;
+    width: 200px;
+}
+
 .form-input {
     width: 100%;
     height: 100%;
@@ -28,13 +38,16 @@ input:-webkit-autofill:active{
     color: var(--primary-color) !important;
     font-family: 'Comfortaa', cursive;
 }
+
 .form-input::placeholder {
     visibility: hidden;
     opacity: 0;
 }
+
 .input-group-icon {
     display: flex;
 }
+
 .input-label {
     position: absolute;
     top: 50%;
@@ -45,48 +58,84 @@ input:-webkit-autofill:active{
     transition: .3s;
     background: var(--white);
 }
-.form-input:not(.form-input:placeholder-shown) ~ .input-label {
+
+.form-input:not(.form-input:placeholder-shown)~.input-label {
     top: 0;
     padding: 0 10px;
 }
+
 .form-input:focus .input-label {
     top: 0;
     padding: 0 10px;
     left: 5px;
 }
+
 .eye {
-    cursor: pointer ;
+    cursor: pointer;
 }
+
 /* ! -------------------------------- messages -------------------------------- ! */
 .message {
     margin-top: 9px;
     display: flex;
     align-items: center;
 }
+
 .message span:last-child {
     margin-left: 10px;
 }
+
 .valid-message {
     color: var(--green);
 }
+
 .invalid-message {
     color: var(--red);
 }
+
 /* ! ------------------------------ valid and invalid inputs ------------------------------ ! */
 .input-group.valid {
     border-color: var(--green);
 }
-.input-group.valid .form-input:not(.form-input:placeholder-shown) ~ .input-label {
+
+.input-group.valid .form-input:not(.form-input:placeholder-shown)~.input-label {
     color: var(--green);
 }
+
 .input-group.invalid {
     border-color: var(--red);
 }
-.input-group.invalid .form-input:not(.form-input:placeholder-shown) ~ .input-label {
+
+.input-group.invalid .form-input:not(.form-input:placeholder-shown)~.input-label {
     color: var(--red);
 }
 
 /* ! ------------------------------ width ------------------------------ ! */
-.w-100{
+.w-100 {
     width: 100%;
+}
+
+/* ! ------------------------------ height ------------------------------ ! */
+.h-100 {
+    height: 100%;
+}
+
+/* ! ------------------------------ display ------------------------------ ! */
+.d-block {
+    display: block;
+}
+
+/* ! ------------------------------ visually input type file------------------------------ ! */
+.visually-hidden {
+    position: absolute !important;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px, 1px, 1px, 1px);
+}
+
+/* ! ------------------------------ message empty image ------------------------------ ! */
+.empty{
+    text-align: center;
+    color: var(--gray);
 }

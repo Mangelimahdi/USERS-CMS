@@ -35,6 +35,9 @@ body::after {
     opacity: 0.5;
 }
 
+.cursor-pointer{
+    cursor: pointer;
+}
 /* ! ---------------------------------- wrap ---------------------------------- ! */
 .wrap {
     position: relative;

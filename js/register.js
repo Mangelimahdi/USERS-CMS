@@ -10,8 +10,11 @@ const passwordMessage = $.querySelector('#password-message');
 const confirmPasswordMessage = $.querySelector('#confirm-password-message');
 const usernameMessage = $.querySelector('#username-message');
 const submitBtn = $.querySelector('#submit-btn');
+const inputGroupChoose = $.querySelector('.input-group-choose');
+const chooseImage = $.querySelector('#choose-image');
+const imagePreview = $.querySelector('.prev-img');
 
-let firstnameValid, lastnameValid, passwordValid, confirmPasswordValid, userNameValid;
+let firstnameValid, lastnameValid, passwordValid, confirmPasswordValid, userNameValid, imageValid;
 firstnameInput.addEventListener('keyup', (event) => {
     if (event.target.value.length < 3) {
         firstnameMessage.innerHTML = 'نام حداقل 3 کاراکتر باشد';
@@ -94,10 +97,77 @@ usernameInput.addEventListener('keyup', (event) => {
 });
 
 let owner = []
+
+// choose image with drag and drop
+const dragEnter = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+const dragover = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+}
+
+const drop = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    const dt = e.dataTransfer;
+    const files = dt.files;
+
+    dragFiles(files)
+}
+
+const dragFiles = (files) => {
+    if (!files.length) {
+        $.querySelector('.empty').style.display = 'block';
+        imageValid = false
+    } else {
+        $.querySelector('.empty').style.display = 'none';
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            if (!file.type.startsWith("image/")) {
+                continue;
+            }
+
+            const render = new FileReader();
+            render.onload = (event) => {
+                imagePreview.setAttribute('src', event.target.result);
+            };
+            render.readAsDataURL(file)
+        }
+        imageValid = true;
+    }
+}
+
+// choose image with click
+const chooseFiles = (event) => {
+    const files = event.target.files;
+    if (!event.target.files.length) {
+        event.target.nextElementSibling.insertAdjacentHTML('beforeend', `<p>عکسی را انتخاب کنید یا  عکسی را بکشید</p`)
+        $.querySelector('.empty').style.display = 'block'
+        imageValid = false
+    }
+    else {
+        $.querySelector('.empty').style.display = 'none'
+        const file = files[0];
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const base64String = e.target.result;
+            imagePreview.src = base64String;
+        }
+        reader.readAsDataURL(file);
+        imageValid = true;
+    }
+}
+
+// set in local
 const setAdminInLocalStorage = (array) => {
     localStorage.setItem('owner', JSON.stringify(array));
 }
 
+// get in local
 const getAdminFromLocalStorage = () => {
     let getowner = JSON.parse(localStorage.getItem('owner'));
     if (owner) {
@@ -111,14 +181,17 @@ const getAdminFromLocalStorage = () => {
 submitBtn.addEventListener('click', (event) => {
     event.preventDefault();
     const baseUrl = getBaseUrl();
-    if (firstnameValid, lastnameValid, passwordValid, confirmPasswordValid, userNameValid) {
+    let getImage = imagePreview.getAttribute('src');
+    if (firstnameValid, lastnameValid, passwordValid, confirmPasswordValid, userNameValid, imageValid) {
         if (passwordInput.value === confirmPasswordInput.value) {
+
             let newUser = {
                 id: Math.floor(Math.random() * 99999),
                 firstname: firstnameInput.value.trim(),
                 lastname: lastnameInput.value.trim(),
                 password: passwordInput.value.trim(),
                 username: usernameInput.value.trim(),
+                image: getImage,
                 roule: 'super-admin',
             }
             owner.push(newUser);
@@ -130,3 +203,8 @@ submitBtn.addEventListener('click', (event) => {
         }
     }
 });
+
+inputGroupChoose.addEventListener('dragenter', dragEnter, false);
+inputGroupChoose.addEventListener('dragover', dragover, false);
+inputGroupChoose.addEventListener('drop', drop, false);
+chooseImage.addEventListener('change', (event) => { chooseFiles(event, this) }, false)

@@ -9,14 +9,23 @@
     <!-- ! -------------------------------- links -------------------------------- ! -->
     <link rel="stylesheet" href="css/register.css">
 </head>
+
 <body>
     <div class="wrap">
         <h1 class="wrap-title">
-            در پنل کاربری خود ثبت نام کنید</h1>
+            در پنل مدیریت خود ثبت نام کنید</h1>
         <!-- ! -------------------------------- form --------------------------------- ! -->
         <form action="" method="" class="form-register">
+            <!-- ! --------------------------- choose image input ---------------------------- ! -->
+            <p class="empty">لطفا عکسی را انتخاب کنید یا بکشید</p>
+            <div class="input-group-choose mt-3">
+                <input type="file" name="choose" id="choose-image" class="visually-hidden  w-100" >
+                <label for="choose-image" class="lable-choose-image d-block cursor-pointer w-100 h-100">
+                    <img class="prev-img d-flex w-100 h-100">
+                </label>
+            </div>
             <!-- ! --------------------------- firstName input ---------------------------- ! -->
-            <div class="input-group firstname-group">
+            <div class="input-group firstname-group mt-3">
                 <input type="text" class="form-input" name="firstname-input" id="firstname-input" placeholder="nothing"
                     spellcheck="false">
                 <label for="firstname-input" class="input-label">نام</label>

@@ -361,7 +361,7 @@ const limitations = (admins, adminId) => {
             else {
                 btnAddUserElem.style.display = 'block';
 
-                $.querySelector('.head-actions').style.display = 'block';
+                $.querySelector('.head-actions').style.display = 'table-cell';
 
                 actions = $.querySelectorAll('.action');
                 actions.forEach(action => {
@@ -475,7 +475,7 @@ editProfile.addEventListener('click', () => {
     if (adminId) {
         let mainAdmin = allAdmins.find(admin => {
             return admin.id === +adminId;
-        })
+        });
         if (mainAdmin) {
             editModal(mainAdmin.id, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.roule, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
             showModal(mainAdmin.nationalCode, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.roule, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
@@ -534,6 +534,7 @@ window.addEventListener('load', () => {
                 owner.roule === 'admin' ? 'مدیر' :
                     owner.roule === 'employee' ? 'کارمند' :
                         owner.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
+            userProfile.setAttribute('src', owner.image)
         });
         return;
     }

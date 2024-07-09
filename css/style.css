@@ -176,6 +176,10 @@ button {
   width: 30%;
 }
 
+.w-40 {
+  width: 40%;
+}
+
 .w-60 {
   width: 60%;
 }
@@ -752,6 +756,10 @@ option {
   .w-xl-40 {
     width: 40%;
   }
+
+  .w-xl-50 {
+    width: 50%;
+  }
 }
 
 @media screen and (max-width:991.98px) {
@@ -761,6 +769,10 @@ option {
 
   .w-lg-30 {
     width: 30%;
+  }
+
+  .w-lg-90 {
+    width: 90%;
   }
 
   .w-lg-100 {
@@ -863,12 +875,20 @@ option {
     display: none;
   }
 
+  .text-sm-center {
+    text-align: center;
+  }
+
   .flex-sm-col {
     flex-direction: column;
   }
 
   .justify-sm-center {
     justify-content: center;
+  }
+
+  .align-sm-center {
+    align-items: center;
   }
 
   .gap-sm-0 {

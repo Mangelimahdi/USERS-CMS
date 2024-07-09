@@ -46,7 +46,7 @@ const displayMessages = (messages) => {
         messageElem.innerHTML = ''
         messages.forEach(message => {
             if (!message.isPublic && message.receiverId !== localStorage.getItem('adminID') && message.receiverId !== localStorage.getItem('ownerID') &&
-                !message.isPublic && message.senderId !== localStorage.getItem('adminID') && message.senderId !== localStorage.getItem('ownerID')
+                message.senderId !== localStorage.getItem('adminID') && message.senderId !== localStorage.getItem('ownerID')
             ) {
                 return;
             }
@@ -142,6 +142,7 @@ searchMessageElem.addEventListener('input', (event) => {
 
     displayMessages(mainFilterMessage)
 });
+
 window.addEventListener('load', () => {
     const messages = getMessageFromLocalStorage();
     displayMessages(messages);

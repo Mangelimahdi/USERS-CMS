@@ -94,7 +94,7 @@ const showDeleteModalDoc = () => {
         });
 
         if (mainFindDocument) {
-            modalTextDeleteDoc.innerHTML = `ایا از حذف مقاله ${mainFindDocument.title}`;
+            modalTextDeleteDoc.innerHTML = `ایا از حذف مقاله ${mainFindDocument.title} مطمئن هستید`;
         }
     }
 }
