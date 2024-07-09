@@ -856,9 +856,16 @@ option {
   .user-text .user-roul {
     font-size: 10px;
   }
+
+  .user-menu-list-item .user-menu-list-item-link {
+    padding: 2px 10px !important;
+  }
 }
 
 @media screen and (max-width:575.98px) {
+  .container {
+    padding: 30px 20px;
+  }
   .w-sm-50 {
     width: 50% !important;
   }
@@ -920,5 +927,9 @@ option {
 @media screen and (max-width:449.98px) {
   .w-xs-70 {
     width: 70% !important;
+  }
+
+  .users-empty {
+    font-size: 18px;
   }
 }

@@ -37,6 +37,8 @@ const getMessageFromLocalStorage = () => {
 }
 
 const displayMessages = (messages) => {
+    let adminID = localStorage.getItem('adminID');
+    let ownerID = localStorage.getItem('ownerID');
     if (messages.length === 0) {
         messageElem.innerHTML = ''
         messageElem.insertAdjacentHTML('beforeend', `
@@ -45,18 +47,18 @@ const displayMessages = (messages) => {
     } else {
         messageElem.innerHTML = ''
         messages.forEach(message => {
-            if (!message.isPublic && message.receiverId !== localStorage.getItem('adminID') && message.receiverId !== localStorage.getItem('ownerID') &&
-                message.senderId !== localStorage.getItem('adminID') && message.senderId !== localStorage.getItem('ownerID')
+            if (!message.isPublic && message.receiverId !== adminID && message.receiverId !== ownerID &&
+                message.senderId !== adminID && message.senderId !== ownerID
             ) {
                 return;
             }
-            if (message.senderId === localStorage.getItem('adminID') || message.senderId === localStorage.getItem('ownerID')) {
+            if (message.senderId === adminID || message.senderId === ownerID) {
                 messageElem.insertAdjacentHTML('beforeend', `
-            <div class="message-content rounded-8 w-60">
+            <div class="message-content rounded-8 w-60 w-sm-100">
                 <p class="message-sender d-flex justify-between"> 
                     <span class="mx-0">
                         <strong>فرستنده:</strong> 
-                        ${message.senderId}
+                        ${message.senderId === adminID || ownerID ? 'شما' : message.senderId}
                         <strong>گیرنده:</strong>
                         ${message.receiverId ? message.receiverId : 'همه کاربران'}
                     </span>
@@ -77,7 +79,7 @@ const displayMessages = (messages) => {
             } else {
                 messageElem.insertAdjacentHTML('beforeend', `
                 <div class="w-100 d-flex flex-end">
-                <div class="message-content rounded-8 w-60">
+                <div class="message-content rounded-8 w-60 w-sm-100">
                         <p class="message-sender d-flex justify-between"> 
                             <span class="mx-0">
                                 <strong>فرستنده:</strong> 
