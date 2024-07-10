@@ -44,7 +44,7 @@ let passwordValid, confirmPasswordValid, userNameValid;
 let adminID = null;
 let isEdit = false;
 let sortOrder = 'asc';
-let isUserName;
+let isUserName = false;
 
 const setAdminsToLocalStorage = (usersArray) => {
     localStorage.setItem('admins', JSON.stringify(usersArray));
@@ -64,6 +64,7 @@ const getAdminsFromLocalStorage = () => {
 const usernameIsAvailable = () => {
     let admins = getAdminsFromLocalStorage();
     let owners = JSON.parse(localStorage.getItem('owner'));
+
     if (admins || admins.length > 0 || owner || owner.length > 0) {
         let findAdminUsername = admins.find(admin => {
             return admin.username === inputUserneme.value.trim();
@@ -74,14 +75,13 @@ const usernameIsAvailable = () => {
         })
 
         if (findAdminUsername || findOwnerUsername) {
-            usernameMessage.innerHTML = 'این نام کاربری قبلا استفاده شده است'
-            usernameMessage.classList.remove('valid-message');
-            usernameMessage.classList.add('invalid-message');
             isUserName = false;
         }
         else {
             isUserName = true;
         }
+
+        return isUserName;
     }
 }
 inputPassword?.addEventListener('keyup', (event) => {
@@ -112,28 +112,34 @@ inputPasswordConfirm?.addEventListener('keyup', (event) => {
         confirmPasswordMessage.classList.add('valid-message');
         confirmPasswordValid = true;
     }
-})
+});
+
 inputUserneme?.addEventListener('keyup', (event) => {
+    let isUser = usernameIsAvailable();
     if (event.target.value.length < 8) {
         usernameMessage.innerHTML = 'نام کاربری حداقل 8 کاراکتر باشد';
         usernameMessage.classList.remove('valid-message');
         usernameMessage.classList.add('invalid-message');
         userNameValid = false;
     }
+    else if (!isUser) {
+        usernameMessage.innerHTML = 'نام کاربری قبلا استفاده شده است!';
+        usernameMessage.classList.remove('valid-message');
+        usernameMessage.classList.add('invalid-message');
+        userNameValid = false;
+    }
     else {
-        usernameMessage.innerHTML = 'تعداد کاراکتر ها معتبر است';
+        usernameMessage.innerHTML = 'نام کاربری معتبر است';
         usernameMessage.classList.remove('invalid-message');
         usernameMessage.classList.add('valid-message');
         userNameValid = true;
     }
 });
 
-
-
 const collectUserData = () => {
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     let now = new Date().toLocaleDateString('fa-IR', options);
-    let usernameIsAvail = usernameIsAvailable();
+    // let isUser = usernameIsAvailable();
 
     if (inputId.value.trim() === '' || inputFirstname.value.trim() === '' || inputLastname.value.trim() === '' || inputEmail.value.trim() === '' || inputPhone.value.trim() === '' || selectRole.value === 'empty' || inputUserneme.value.trim() === '' || inputPassword.value.trim() === '') {
         alert('لطفا کارد ها را با دقت پر کنید!');
@@ -144,7 +150,8 @@ const collectUserData = () => {
         alert('رمز عبور تطابق ندارد');
         return null;
     }
-    if (passwordValid && confirmPasswordValid && userNameValid && isUserName) {
+
+    if (passwordValid && confirmPasswordValid && userNameValid) {
         return {
             id: isEdit ? adminID : admins.length + 1,
             nationalCode: inputId.value.trim(),
