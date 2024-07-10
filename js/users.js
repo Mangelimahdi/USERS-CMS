@@ -3,7 +3,6 @@ const adminCount = document.querySelector(".admin-count");
 const employeeCount = document.querySelector(".employee-count");
 const supportCount = document.querySelector(".support-count");
 
-
 const getOwner = JSON.parse(localStorage.getItem('owner'));
 const getAdmins = JSON.parse(localStorage.getItem('admins'));
 
@@ -24,7 +23,7 @@ const adminCounter = () => {
         if (adminFilter) {
             adminCount.innerHTML = adminFilter.length
         } else {
-            adminCount.innerHTML = '0';
+            adminCount.innerHTML = adminFilter.length;
         }
     }
 }
@@ -37,7 +36,7 @@ const employeeCounter = () => {
         if (employeeFilter) {
             employeeCount.innerHTML = employeeFilter.length
         } else {
-            employeeCount.innerHTML = "0"
+            employeeCount.innerHTML = employeeFilter.length
         }
     }
 }
@@ -50,10 +49,11 @@ const supportCounter = () => {
             supportCount.innerHTML = supportFilter.length
         }
         else {
-            supportCount.innerHTML = '0'
+            supportCount.innerHTML = supportFilter.length
         }
     }
 }
+
 ownerCounter();
 adminCounter();
 employeeCounter();
