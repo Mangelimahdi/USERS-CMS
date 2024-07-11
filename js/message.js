@@ -89,9 +89,9 @@ const displayMessages = (messages) => {
                         <p class="message-sender d-flex justify-between"> 
                             <span class="mx-0">
                                 <strong>فرستنده:</strong> 
-                                ${message.senderId}
+                                ${message.senderId === adminID || ownerID ? 'شما' : message.senderId}
                                 <strong>گیرنده:</strong>
-                                ${message.receiverId ? message.receiverId : 'همه کاربران'}
+                                ${message.receiverId === adminID || ownerID ? 'شما' : message.receiverId || 'همه کاربران'}
                             </span>
                         </p>
                         <p class="message-text">${message.content}</p>

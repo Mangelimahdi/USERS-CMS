@@ -38,6 +38,10 @@ const confirmPasswordMessage = $.querySelector('#confirm-password-message');
 const usernameMessage = $.querySelector('#username-message');
 const rolesTable = $.querySelector('.roles-table');
 const rolesTableInput = $.querySelectorAll('.roles-table input[type="checkbox"]');
+const ownerCount = document.querySelector(".owner-count");
+const adminCount = document.querySelector(".admin-count");
+const employeeCount = document.querySelector(".employee-count");
+const supportCount = document.querySelector(".support-count");
 
 let passwordValid = false, confirmPasswordValid = false, userNameValid = false;
 let admins = [];
@@ -61,9 +65,13 @@ const getAdminsFromLocalStorage = () => {
     return admins;
 }
 
+const getOwnerFromLocalStorage = () => {
+    return JSON.parse(localStorage.getItem('owner')) || [];
+}
+
 const usernameIsAvailable = () => {
     let admins = getAdminsFromLocalStorage();
-    let owner = JSON.parse(localStorage.getItem('owner'));
+    let owner = getOwnerFromLocalStorage()
 
     if ((admins && admins.length > 0) || (owner && owner.length > 0)) {
         let findAdminUsername = admins.find(admin => {
@@ -73,7 +81,6 @@ const usernameIsAvailable = () => {
         let findOwnerUsername = owner.find(owner => {
             return owner.username === inputUsername.value.trim();
         })
-
         return !(findAdminUsername || findOwnerUsername);
     }
     return true;
@@ -138,6 +145,7 @@ const validateConfirmPassword = () => {
         confirmPasswordMessage.classList.add('valid-message');
     }
 }
+
 inputPassword?.addEventListener('keyup', (event) => {
     validatePassword();
 })
@@ -194,10 +202,8 @@ const collectUserData = () => {
                 },
             }
         }
-        console.log('User Data collected', userData);
         return userData
     } else {
-        console.log("Validation failed");
         return null;
     }
 };
@@ -212,7 +218,7 @@ const newUser = () => {
         closeModal();
     }
 }
-
+// filter users
 const sortAdmins = (admins, sortOrder) => {
     return admins.sort((a, b) => {
         if (sortOrder === 'asc') {
@@ -223,6 +229,84 @@ const sortAdmins = (admins, sortOrder) => {
         }
     })
 }
+
+const searchUsers = (event) => {
+    let admins = getAdminsFromLocalStorage();
+    let filterUsers = admins.filter((admin) => {
+        return admin.nationalCode.includes(event.target.value) || admin.firstName.includes(event.target.value) || admin.lastName.includes(event.target.value);
+    })
+    generateData(filterUsers)
+}
+
+// admins count
+const getOwner = getOwnerFromLocalStorage();
+const getAdmins = getAdminsFromLocalStorage();
+
+const ownerCounter = () => {
+    if (ownerCount) {
+        if (getOwner) {
+            ownerCount.innerHTML = getOwner.length;
+        }
+        else {
+            ownerCount.innerHTML = 0;
+        }
+
+    }
+}
+
+const adminCounter = () => {
+    if (adminCount) {
+        if (getAdmins && getAdmins.length != 0) {
+            let adminFilter = getAdmins.filter(admin => {
+                return admin.role === 'admin'
+            })
+            if (adminFilter && adminFilter.length != 0) {
+                adminCount.innerHTML = adminFilter.length;
+            } else {
+                adminCount.innerHTML = "0";
+            }
+        } else {
+            adminCount.innerHTML = "0";
+        }
+    }
+}
+
+const employeeCounter = () => {
+    if (employeeCount) {
+        if (getAdmins && getAdmins.length > 0) {
+            let employeeFilter = getAdmins.filter(employee => {
+                return employee.role === 'employee';
+            });
+            if (employeeFilter && employeeFilter.length != 0) {
+                employeeCount.innerHTML = employeeFilter.length
+            }
+            else {
+                employeeCount.innerHTML = "0"
+            }
+        } else {
+            employeeCount.innerHTML = "0"
+        }
+    }
+}
+const supportCounter = () => {
+    if (supportCount) {
+        if (getAdmins && getAdmins.length > 0) {
+            let supportFilter = getAdmins.filter(support => {
+                return support.role === 'support';
+            });
+            if (supportFilter && supportFilter.length != 0) {
+                supportCount.innerHTML = supportFilter.length
+            }
+            else {
+                supportCount.innerHTML = "0"
+            }
+        }
+        else {
+            supportCount.innerHTML = "0"
+        }
+    }
+}
+
 
 // show and close modal add and edit
 const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions) => {
@@ -279,6 +363,9 @@ const clearInputs = () => {
     passwordValid = false;
     confirmPasswordValid = false;
     userNameValid = false;
+    usernameMessage.innerHTML = ''
+    passwordMessage.innerHTML = ''
+    confirmPasswordMessage.innerHTML = ''
     rolesTableInput.forEach(role => {
         role.checked = false;
     });
@@ -398,6 +485,7 @@ const showMenu = () => {
 const closeMenu = () => {
     userMenuElem.classList.add('d-none');
 }
+// limit access level
 const limitations = () => {
     let actions;
     let actionsTrash;
@@ -441,14 +529,8 @@ const limitations = () => {
     })
 }
 
-const searchUsers = (event) => {
-    let admins = getAdminsFromLocalStorage();
-    let filterUsers = admins.filter((admin) => {
-        return admin.nationalCode.includes(event.target.value) || admin.firstName.includes(event.target.value) || admin.lastName.includes(event.target.value);
-    })
-    generateData(filterUsers)
-}
 
+// base url
 const getBaseUrl = () => {
     let hostName = window.location.hostname;
     if (hostName === '127.0.0.1' || hostName === 'localhost') {
@@ -457,7 +539,7 @@ const getBaseUrl = () => {
         return "/USERS-CMS"
     }
 }
-
+// events
 btnCloseModalElem?.addEventListener('click', closeModal);
 
 btnDeleteModalDeleteElem?.addEventListener('click', () => {
@@ -470,6 +552,10 @@ btnDeleteModalDeleteElem?.addEventListener('click', () => {
         getAdmins.splice(mainIndexUser, 1);
         setAdminsToLocalStorage(admins);
         generateData(admins);
+        ownerCounter();
+        adminCounter();
+        employeeCounter();
+        supportCounter();
         closeDeleteModal();
     }
 });
@@ -489,7 +575,6 @@ btnAddOrEdit?.addEventListener('click', () => {
         let userIndex = allAdmins.findIndex(admin => admin.id === adminID);
         if (userIndex !== -1) {
             let updatedUser = collectUserData();
-            console.log(updatedUser)
             if (updatedUser) {
                 allAdmins[userIndex] = updatedUser;
                 setAdminsToLocalStorage(allAdmins);
@@ -502,6 +587,10 @@ btnAddOrEdit?.addEventListener('click', () => {
         newUser();
         isEdit = true;
     }
+    ownerCounter();
+    adminCounter();
+    employeeCounter();
+    supportCounter();
 });
 
 closeModalDeleteElem?.addEventListener("click", () => {
@@ -578,11 +667,15 @@ exitPanel.addEventListener('click', () => {
 
 window.addEventListener('load', () => {
     const admins = getAdminsFromLocalStorage();
-    generateData(admins);
-
     let ownerId = localStorage.getItem('ownerID');
     let adminId = localStorage.getItem('adminID');
-    let owner = JSON.parse(localStorage.getItem('owner'));
+    let owner = getOwnerFromLocalStorage()
+    generateData(admins);
+    ownerCounter();
+    adminCounter();
+    employeeCounter();
+    supportCounter();
+
     const baseUrl = getBaseUrl();
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
@@ -619,5 +712,6 @@ window.addEventListener('load', () => {
         limitations();
         return;
     }
+
     location.href = `${baseUrl}/login.html`;
 });
