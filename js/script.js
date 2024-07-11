@@ -313,7 +313,7 @@ const supportCounter = () => {
 
 
 // show and close modal add and edit
-const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions,image) => {
+const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions, image) => {
     modalUserElem.classList.add('show');
     modalUserElem.style.display = 'block';
     modalActiveElem.classList.add('show');
@@ -776,6 +776,7 @@ window.addEventListener('load', () => {
             titleHeader.innerHTML = `سلام ${admin.firstName}`
             userTitle.innerHTML = `${admin.firstName} ${admin.lastName}`;
             userRoul.innerHTML = admin.role === 'super-admin' ? 'مدیر محصول' : admin.role === 'admin' ? 'مدیر' : admin.role === 'employee' ? 'کارمند' : admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'
+            userProfile.setAttribute('src', admin.image)
         });
         limitations();
         return;
