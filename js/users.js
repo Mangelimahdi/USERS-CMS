@@ -7,7 +7,7 @@ const getOwner = JSON.parse(localStorage.getItem('owner'));
 const getAdmins = JSON.parse(localStorage.getItem('admins'));
 
 const ownerCounter = () => {
-    if (getOwner || getOwner.length != 0) {
+    if (getOwner || getOwner.length > 0) {
         ownerCount.innerHTML = getOwner.length;
     }
     else {
@@ -16,7 +16,7 @@ const ownerCounter = () => {
 }
 
 const adminCounter = () => {
-    if(getAdmins){
+    if (getAdmins || getAdmins.length > 0) {
         let adminFilter = getAdmins.filter(admin => {
             return admin.role === 'admin'
         })
@@ -29,7 +29,7 @@ const adminCounter = () => {
 }
 
 const employeeCounter = () => {
-    if(getAdmins){
+    if (getAdmins || getAdmins.length > 0) {
         let employeeFilter = getAdmins.filter(employee => {
             return employee.role === 'employee';
         });
@@ -41,7 +41,7 @@ const employeeCounter = () => {
     }
 }
 const supportCounter = () => {
-    if(getAdmins){
+    if (getAdmins || getAdmins.length > 0) {
         let supportFilter = getAdmins.filter(support => {
             return support.role === 'support';
         });
