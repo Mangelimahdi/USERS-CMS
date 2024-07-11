@@ -71,9 +71,9 @@ const displayMessages = (messages) => {
                                 <i class="fa fa-trash"></i>
                                 حذف
                             </span>
-                            <span class="message-delete cursor-pointer d-flex align-center gap-0-2" onclick="deleteMessage(${message.senderId})">
-                                <i class="fa fa-trash"></i>
-                                حذف
+                            <span class="message-delete cursor-pointer d-flex align-center gap-0-2" onclick="editMessage(${message.senderId})">
+                                <i class="fa fa-pencil"></i>
+                                ویرایش
                             </span>
                         </span>
                     </span> 
@@ -124,7 +124,9 @@ const deleteMessage = () => {
         displayMessages(messages);
     }
 }
-
+const editMessage = (messageId) => {
+console.log(messageId)
+}
 sendMessageElem.addEventListener('click', () => {
     const content = messageContentElem.value
     const receiverId = messageReceiverElem.value;

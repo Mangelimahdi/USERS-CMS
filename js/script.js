@@ -38,12 +38,15 @@ const confirmPasswordMessage = $.querySelector('#confirm-password-message');
 const usernameMessage = $.querySelector('#username-message');
 const rolesTable = $.querySelector('.roles-table');
 const rolesTableInput = $.querySelectorAll('.roles-table input[type="checkbox"]');
-const ownerCount = document.querySelector(".owner-count");
-const adminCount = document.querySelector(".admin-count");
-const employeeCount = document.querySelector(".employee-count");
-const supportCount = document.querySelector(".support-count");
+const ownerCount = $.querySelector(".owner-count");
+const adminCount = $.querySelector(".admin-count");
+const employeeCount = $.querySelector(".employee-count");
+const supportCount = $.querySelector(".support-count");
+const inputGroupChoose = $.querySelector('.input-group-choose');
+const chooseImage = $.querySelector('#choose-image');
+const imagePreview = $.querySelector('.prev-img');
 
-let passwordValid = false, confirmPasswordValid = false, userNameValid = false;
+let passwordValid = false, confirmPasswordValid = false, userNameValid = false, imageValid = false
 let admins = [];
 let adminID = null;
 let isEdit = false;
@@ -161,7 +164,7 @@ inputUsername?.addEventListener('keyup', (event) => {
 const collectUserData = () => {
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     let now = new Date().toLocaleDateString('fa-IR', options);
-
+    let imageUrl = imagePreview.src
     if (inputId.value.trim() === '' || inputFirstname.value.trim() === '' || inputLastname.value.trim() === '' || inputEmail.value.trim() === '' || inputPhone.value.trim() === '' || selectRole.value === 'empty' || inputUsername.value.trim() === '' || inputPassword.value.trim() === '') {
         alert('لطفا کارد ها را با دقت پر کنید!');
         return null
@@ -183,6 +186,7 @@ const collectUserData = () => {
             role: selectRole.value,
             username: inputUsername.value.trim(),
             password: inputPassword.value.trim(),
+            image: imageUrl,
             date: now,
             permissions: {
                 'admin': {
@@ -309,7 +313,7 @@ const supportCounter = () => {
 
 
 // show and close modal add and edit
-const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions) => {
+const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions,image) => {
     modalUserElem.classList.add('show');
     modalUserElem.style.display = 'block';
     modalActiveElem.classList.add('show');
@@ -327,7 +331,7 @@ const showModal = (nationalCode, firstName, lastName, email, phone, role, userna
         inputUsername.value = username;
         inputPassword.value = password;
         inputConfirmPassword.value = password;
-
+        imagePreview.src = image
         const permissionsObj = permissions || {};
 
         $.getElementById('admin-read').checked = permissionsObj['admin']?.read || false;
@@ -366,6 +370,7 @@ const clearInputs = () => {
     usernameMessage.innerHTML = ''
     passwordMessage.innerHTML = ''
     confirmPasswordMessage.innerHTML = ''
+    imagePreview.removeAttribute("src")
     rolesTableInput.forEach(role => {
         role.checked = false;
     });
@@ -461,7 +466,7 @@ const editModal = (adminId) => {
             return userAdmin.id === adminID;
         });
         if (mainUserAdmin) {
-            showModal(mainUserAdmin.nationalCode, mainUserAdmin.firstName, mainUserAdmin.lastName, mainUserAdmin.email, mainUserAdmin.phone, mainUserAdmin.role, mainUserAdmin.username, mainUserAdmin.password, mainUserAdmin.permissions);
+            showModal(mainUserAdmin.nationalCode, mainUserAdmin.firstName, mainUserAdmin.lastName, mainUserAdmin.email, mainUserAdmin.phone, mainUserAdmin.role, mainUserAdmin.username, mainUserAdmin.password, mainUserAdmin.permissions, mainUserAdmin.image);
         }
     }
 }
@@ -485,6 +490,69 @@ const showMenu = () => {
 const closeMenu = () => {
     userMenuElem.classList.add('d-none');
 }
+
+// choose Image handler
+const dragEnter = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+}
+
+const dragOver = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+}
+
+const drop = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+    const dt = event.dataTransfer;
+    const files = dt.files;
+
+    selectImageByDragging(files)
+}
+
+const selectImageByDragging = (files) => {
+    let file;
+    if (!files.length) {
+        $.querySelector('.empty').style.display = 'block'
+        imageValid = false;
+    } else {
+        $.querySelector('.empty').style.display = 'none'
+        for (let i = 0; i < files.length; i++) {
+            file = files[i];
+            if (!file.type.startsWith('image/')) {
+                continue;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                imagePreview.src = event.target.result;
+            }
+            reader.readAsDataURL(file)
+        }
+        imageValid = true;
+
+    }
+}
+const selectImageByClick = (event) => {
+    const files = event.target.files;
+    if (!files.length) {
+        $.querySelector('.empty').style.display = 'block';
+        imageValid = false;
+    }
+    else {
+        $.querySelector('.empty').style.display = 'none';
+        const file = files[0]
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const base64String = event.target.result;
+            imagePreview.src = base64String;
+        }
+        reader.readAsDataURL(file);
+        imageValid = true;
+    }
+}
+
 // limit access level
 const limitations = () => {
     let actions;
@@ -715,3 +783,8 @@ window.addEventListener('load', () => {
 
     location.href = `${baseUrl}/login.html`;
 });
+
+inputGroupChoose.addEventListener('dragenter', dragEnter, false);
+inputGroupChoose.addEventListener('dragover', dragOver, false);
+inputGroupChoose.addEventListener('drop', drop, false);
+chooseImage.addEventListener('change', (event) => { selectImageByClick(event, this) }, false)

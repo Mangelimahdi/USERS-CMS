@@ -104,7 +104,7 @@ const dragEnter = (e) => {
     e.preventDefault();
 }
 
-const dragover = (e) => {
+const dragOver = (e) => {
     e.stopPropagation();
     e.preventDefault();
 }
@@ -116,17 +116,18 @@ const drop = (e) => {
     const dt = e.dataTransfer;
     const files = dt.files;
 
-    dragFiles(files)
+    selectImageByDragging(files)
 }
 
-const dragFiles = (files) => {
+const selectImageByDragging = (files) => {
     if (!files.length) {
         $.querySelector('.empty').style.display = 'block';
-        imageValid = false
+        imageValid = false;
     } else {
         $.querySelector('.empty').style.display = 'none';
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
+
             if (!file.type.startsWith("image/")) {
                 continue;
             }
@@ -135,17 +136,16 @@ const dragFiles = (files) => {
             render.onload = (event) => {
                 imagePreview.setAttribute('src', event.target.result);
             };
-            render.readAsDataURL(file)
+            render.readAsDataURL(file);
         }
         imageValid = true;
     }
 }
 
 // choose image with click
-const chooseFiles = (event) => {
+const selectImageByClick = (event) => {
     const files = event.target.files;
-    if (!event.target.files.length) {
-        event.target.nextElementSibling.insertAdjacentHTML('beforeend', `<p>عکسی را انتخاب کنید یا  عکسی را بکشید</p`)
+    if (!files.length) {
         $.querySelector('.empty').style.display = 'block'
         imageValid = false
     }
@@ -205,6 +205,6 @@ submitBtn.addEventListener('click', (event) => {
 });
 
 inputGroupChoose.addEventListener('dragenter', dragEnter, false);
-inputGroupChoose.addEventListener('dragover', dragover, false);
+inputGroupChoose.addEventListener('dragover', dragOver, false);
 inputGroupChoose.addEventListener('drop', drop, false);
-chooseImage.addEventListener('change', (event) => { chooseFiles(event, this) }, false)
+chooseImage.addEventListener('change', (event) => { selectImageByClick(event, this) }, false)
