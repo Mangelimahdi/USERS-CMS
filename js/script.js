@@ -14,7 +14,7 @@ const inputPhone = $.querySelector(".input-phone");
 const selectRole = $.querySelector(".select-role");
 const inputUsername = $.querySelector(".input-userneme");
 const inputPassword = $.querySelector(".input-password");
-const inputPasswordConfirm = $.querySelector(".input-password-confirm");
+const inputConfirmPassword = $.querySelector(".input-password-confirm");
 const userContainer = $.querySelector('.user-container');
 const modalActiveElem = $.querySelector('.modal-active');
 const modalUserElem = $.querySelector('.modal');
@@ -79,49 +79,19 @@ const usernameIsAvailable = () => {
     return true;
 }
 
-inputPassword?.addEventListener('keyup', (event) => {
-    if (event.target.value.length < 8) {
-        passwordMessage.innerHTML = 'رمز عبور حداقل 8 کاراکتر باشد';
-        passwordMessage.classList.remove('valid-message');
-        passwordMessage.classList.add('invalid-message');
-        passwordValid = false;
-    }
-    else {
-        passwordMessage.innerHTML = 'رمز عبور معتبر است';
-        passwordMessage.classList.remove('invalid-message');
-        passwordMessage.classList.add('valid-message');
-        passwordValid = true;
-    }
-})
-
-inputPasswordConfirm?.addEventListener('keyup', (event) => {
-    if (event.target.value.length < 8) {
-        confirmPasswordMessage.innerHTML = 'تکرار رمز عبور حداقل 8 کاراکتر باشد';
-        confirmPasswordMessage.classList.remove('valid-message');
-        confirmPasswordMessage.classList.add('invalid-message');
-        confirmPasswordValid = false;
-    }
-    else {
-        confirmPasswordMessage.innerHTML = 'رمز عبور معتبر است';
-        confirmPasswordMessage.classList.remove('invalid-message');
-        confirmPasswordMessage.classList.add('valid-message');
-        confirmPasswordValid = true;
-    }
-});
-
-inputUsername?.addEventListener('keyup', (event) => {
-    let isUser = usernameIsAvailable();
-    if (event.target.value.length < 8) {
+const validateUsername = () => {
+    let usernameValue = inputUsername.value.trim();
+    if (usernameValue.length < 8) {
+        userNameValid = false;
         usernameMessage.innerHTML = 'نام کاربری حداقل 8 کاراکتر باشد';
         usernameMessage.classList.remove('valid-message');
         usernameMessage.classList.add('invalid-message');
-        userNameValid = false;
     }
-    else if (!isUser) {
+    else if (!usernameIsAvailable()) {
+        userNameValid = false;
         usernameMessage.innerHTML = 'نام کاربری قبلا استفاده شده است!';
         usernameMessage.classList.remove('valid-message');
         usernameMessage.classList.add('invalid-message');
-        userNameValid = false;
     }
     else {
         usernameMessage.innerHTML = 'نام کاربری معتبر است';
@@ -129,6 +99,55 @@ inputUsername?.addEventListener('keyup', (event) => {
         usernameMessage.classList.add('valid-message');
         userNameValid = true;
     }
+}
+
+const validatePassword = () => {
+    let passwordValue = inputPassword.value.trim();
+    if (passwordValue.length < 8) {
+        passwordValid = false;
+        passwordMessage.innerHTML = 'رمز عبور حداقل 8 کاراکتر باشد';
+        passwordMessage.classList.remove('valid-message');
+        passwordMessage.classList.add('invalid-message');
+    }
+    else {
+        passwordValid = true;
+        passwordMessage.innerHTML = 'رمز عبور معتبر است';
+        passwordMessage.classList.remove('invalid-message');
+        passwordMessage.classList.add('valid-message');
+    }
+}
+
+const validateConfirmPassword = () => {
+    let confirmPasswordValue = inputConfirmPassword.value.trim();
+    let passwordValue = inputPassword.value.trim();
+    if (confirmPasswordValue.length < 8) {
+        confirmPasswordValid = false;
+        confirmPasswordMessage.innerHTML = 'تکرار رمز عبور حداقل 8 کاراکتر باشد';
+        confirmPasswordMessage.classList.remove('valid-message');
+        confirmPasswordMessage.classList.add('invalid-message');
+    } else if (confirmPasswordValue != passwordValue) {
+        confirmPasswordValid = false;
+        confirmPasswordMessage.innerHTML = 'رمز عبور و تکرار آن یکسان نیست!';
+        confirmPasswordMessage.classList.remove('valid-message');
+        confirmPasswordMessage.classList.add('invalid-message');
+    }
+    else {
+        confirmPasswordValid = true;
+        confirmPasswordMessage.innerHTML = 'رمز عبور معتبر است';
+        confirmPasswordMessage.classList.remove('invalid-message');
+        confirmPasswordMessage.classList.add('valid-message');
+    }
+}
+inputPassword?.addEventListener('keyup', (event) => {
+    validatePassword();
+})
+
+inputConfirmPassword?.addEventListener('keyup', (event) => {
+    validateConfirmPassword();
+});
+
+inputUsername?.addEventListener('keyup', (event) => {
+    validateUsername()
 });
 
 const collectUserData = () => {
@@ -140,43 +159,46 @@ const collectUserData = () => {
         return null
     }
 
-    if (inputPassword.value.trim() !== inputPasswordConfirm.value.trim()) {
+    if (inputPassword.value.trim() !== inputConfirmPassword.value.trim()) {
         alert('رمز عبور تطابق ندارد');
         return null;
-    }
 
-    if (!isEdit && (!userNameValid || !passwordValid || !confirmPasswordValid)) {
-        return null;
     }
-
-    return {
-        id: isEdit ? adminID : admins.length + 1,
-        nationalCode: inputId.value.trim(),
-        firstName: inputFirstname.value.trim(),
-        lastName: inputLastname.value.trim(),
-        email: inputEmail.value.trim(),
-        phone: inputPhone.value.trim(),
-        role: selectRole.value,
-        username: inputUsername.value.trim(),
-        password: inputPassword.value.trim(),
-        date: now,
-        permissions: {
-            'admin': {
-                read: $.getElementById('admin-read').checked,
-                write: $.getElementById('admin-write').checked,
-                delete: $.getElementById('admin-delete').checked,
-            },
-            'employee': {
-                read: $.getElementById('employee-read').checked,
-                write: $.getElementById('employee-write').checked,
-                delete: $.getElementById('employee-delete').checked,
-            },
-            'support': {
-                read: $.getElementById('support-read').checked,
-                write: $.getElementById('support-write').checked,
-                delete: $.getElementById('support-delete').checked,
-            },
+    if (userNameValid && passwordValid && confirmPasswordValid) {
+        let userData = {
+            id: isEdit ? adminID : admins.length + 1,
+            nationalCode: inputId.value.trim(),
+            firstName: inputFirstname.value.trim(),
+            lastName: inputLastname.value.trim(),
+            email: inputEmail.value.trim(),
+            phone: inputPhone.value.trim(),
+            role: selectRole.value,
+            username: inputUsername.value.trim(),
+            password: inputPassword.value.trim(),
+            date: now,
+            permissions: {
+                'admin': {
+                    read: $.getElementById('admin-read').checked,
+                    write: $.getElementById('admin-write').checked,
+                    delete: $.getElementById('admin-delete').checked,
+                },
+                'employee': {
+                    read: $.getElementById('employee-read').checked,
+                    write: $.getElementById('employee-write').checked,
+                    delete: $.getElementById('employee-delete').checked,
+                },
+                'support': {
+                    read: $.getElementById('support-read').checked,
+                    write: $.getElementById('support-write').checked,
+                    delete: $.getElementById('support-delete').checked,
+                },
+            }
         }
+        console.log('User Data collected', userData);
+        return userData
+    } else {
+        console.log("Validation failed");
+        return null;
     }
 };
 
@@ -220,7 +242,7 @@ const showModal = (nationalCode, firstName, lastName, email, phone, role, userna
         selectRole.value = role;
         inputUsername.value = username;
         inputPassword.value = password;
-        inputPasswordConfirm.value = password;
+        inputConfirmPassword.value = password;
 
         const permissionsObj = permissions || {};
 
@@ -253,7 +275,7 @@ const clearInputs = () => {
     selectRole.value = 'empty';
     inputUsername.value = '';
     inputPassword.value = '';
-    inputPasswordConfirm.value = '';
+    inputConfirmPassword.value = '';
     passwordValid = false;
     confirmPasswordValid = false;
     userNameValid = false;
@@ -459,12 +481,13 @@ btnAddUserElem?.addEventListener('click', () => {
 });
 
 btnAddOrEdit?.addEventListener('click', () => {
+    validateUsername();
+    validatePassword();
+    validateConfirmPassword();
     if (isEdit) {
         let allAdmins = getAdminsFromLocalStorage();
         let userIndex = allAdmins.findIndex(admin => admin.id === adminID);
         if (userIndex !== -1) {
-            console.log(userIndex)
-            console.log(allAdmins[userIndex])
             let updatedUser = collectUserData();
             console.log(updatedUser)
             if (updatedUser) {
