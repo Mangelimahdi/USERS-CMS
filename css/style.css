@@ -542,6 +542,7 @@ option {
   clip: rect(1px, 1px, 1px, 1px);
 }
 .empty{
+  font-size: 13px;
   text-align: center;
   color: var(--gray);
 }
