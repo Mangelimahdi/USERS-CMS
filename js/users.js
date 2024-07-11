@@ -5,9 +5,9 @@ const supportCount = document.querySelector(".support-count");
 
 const getOwner = JSON.parse(localStorage.getItem('owner'));
 const getAdmins = JSON.parse(localStorage.getItem('admins'));
-
+console.log(getAdmins)
 const ownerCounter = () => {
-    if (getOwner || getOwner.length > 0) {
+    if (getOwner) {
         ownerCount.innerHTML = getOwner.length;
     }
     else {
@@ -16,11 +16,11 @@ const ownerCounter = () => {
 }
 
 const adminCounter = () => {
-    if (getAdmins || getAdmins.length != 0) {
+    if (getAdmins && getAdmins.length != 0) {
         let adminFilter = getAdmins.filter(admin => {
             return admin.role === 'admin'
         })
-        if (adminFilter || adminFilter.length != 0) {
+        if (adminFilter && adminFilter.length != 0) {
             adminCount.innerHTML = adminFilter.length;
         } else {
             adminCount.innerHTML = "0";
@@ -29,11 +29,11 @@ const adminCounter = () => {
 }
 
 const employeeCounter = () => {
-    if (getAdmins || getAdmins.length > 0) {
+    if (getAdmins && getAdmins.length > 0) {
         let employeeFilter = getAdmins.filter(employee => {
             return employee.role === 'employee';
         });
-        if (employeeFilter || employeeFilter.length != 0) {
+        if (employeeFilter && employeeFilter.length != 0) {
             employeeCount.innerHTML = employeeFilter.length
         } else {
             employeeCount.innerHTML = employeeFilter.length
@@ -41,11 +41,11 @@ const employeeCounter = () => {
     }
 }
 const supportCounter = () => {
-    if (getAdmins || getAdmins.length > 0) {
+    if (getAdmins && getAdmins.length > 0) {
         let supportFilter = getAdmins.filter(support => {
             return support.role === 'support';
         });
-        if (supportFilter || supportFilter.length != 0) {
+        if (supportFilter && supportFilter.length != 0) {
             supportCount.innerHTML = supportFilter.length
         }
         else {
