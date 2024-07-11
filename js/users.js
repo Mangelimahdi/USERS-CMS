@@ -16,14 +16,14 @@ const ownerCounter = () => {
 }
 
 const adminCounter = () => {
-    if (getAdmins || getAdmins.length > 0) {
+    if (getAdmins || getAdmins.length != 0) {
         let adminFilter = getAdmins.filter(admin => {
             return admin.role === 'admin'
         })
-        if (adminFilter) {
-            adminCount.innerHTML = adminFilter.length
-        } else {
+        if (adminFilter || adminFilter.length != 0) {
             adminCount.innerHTML = adminFilter.length;
+        } else {
+            adminCount.innerHTML = "0";
         }
     }
 }
@@ -33,7 +33,7 @@ const employeeCounter = () => {
         let employeeFilter = getAdmins.filter(employee => {
             return employee.role === 'employee';
         });
-        if (employeeFilter) {
+        if (employeeFilter || employeeFilter.length != 0) {
             employeeCount.innerHTML = employeeFilter.length
         } else {
             employeeCount.innerHTML = employeeFilter.length
@@ -45,7 +45,7 @@ const supportCounter = () => {
         let supportFilter = getAdmins.filter(support => {
             return support.role === 'support';
         });
-        if (supportFilter) {
+        if (supportFilter || supportFilter.length != 0) {
             supportCount.innerHTML = supportFilter.length
         }
         else {
