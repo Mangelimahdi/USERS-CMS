@@ -12,7 +12,7 @@ const exitPanel = $.querySelector('#exit-panel');
 const inputEmail = $.querySelector(".input-email");
 const inputPhone = $.querySelector(".input-phone");
 const selectRole = $.querySelector(".select-role");
-const inputUserneme = $.querySelector(".input-userneme");
+const inputUsername = $.querySelector(".input-userneme");
 const inputPassword = $.querySelector(".input-password");
 const inputPasswordConfirm = $.querySelector(".input-password-confirm");
 const userContainer = $.querySelector('.user-container');
@@ -37,14 +37,14 @@ const passwordMessage = $.querySelector('#password-message');
 const confirmPasswordMessage = $.querySelector('#confirm-password-message');
 const usernameMessage = $.querySelector('#username-message');
 const rolesTable = $.querySelector('.roles-table');
+const rolesTableInput = $.querySelectorAll('.roles-table input[type="checkbox"]');
 
+let passwordValid = false, confirmPasswordValid = false, userNameValid = false;
 let admins = [];
-
-let passwordValid, confirmPasswordValid, userNameValid;
 let adminID = null;
 let isEdit = false;
+let isUserName;
 let sortOrder = 'asc';
-let isUserName = false;
 
 const setAdminsToLocalStorage = (usersArray) => {
     localStorage.setItem('admins', JSON.stringify(usersArray));
@@ -63,27 +63,22 @@ const getAdminsFromLocalStorage = () => {
 
 const usernameIsAvailable = () => {
     let admins = getAdminsFromLocalStorage();
-    let owners = JSON.parse(localStorage.getItem('owner'));
+    let owner = JSON.parse(localStorage.getItem('owner'));
 
-    if (admins || admins.length > 0 || owner || owner.length > 0) {
+    if ((admins && admins.length > 0) || (owner && owner.length > 0)) {
         let findAdminUsername = admins.find(admin => {
-            return admin.username === inputUserneme.value.trim();
+            return admin.username === inputUsername.value.trim();
         });
 
-        let findOwnerUsername = owners.find(owner => {
-            return owner.username === inputUserneme.value.trim();
+        let findOwnerUsername = owner.find(owner => {
+            return owner.username === inputUsername.value.trim();
         })
 
-        if (findAdminUsername || findOwnerUsername) {
-            isUserName = false;
-        }
-        else {
-            isUserName = true;
-        }
-
-        return isUserName;
+        return !(findAdminUsername || findOwnerUsername);
     }
+    return true;
 }
+
 inputPassword?.addEventListener('keyup', (event) => {
     if (event.target.value.length < 8) {
         passwordMessage.innerHTML = 'رمز عبور حداقل 8 کاراکتر باشد';
@@ -114,7 +109,7 @@ inputPasswordConfirm?.addEventListener('keyup', (event) => {
     }
 });
 
-inputUserneme?.addEventListener('keyup', (event) => {
+inputUsername?.addEventListener('keyup', (event) => {
     let isUser = usernameIsAvailable();
     if (event.target.value.length < 8) {
         usernameMessage.innerHTML = 'نام کاربری حداقل 8 کاراکتر باشد';
@@ -139,9 +134,8 @@ inputUserneme?.addEventListener('keyup', (event) => {
 const collectUserData = () => {
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     let now = new Date().toLocaleDateString('fa-IR', options);
-    // let isUser = usernameIsAvailable();
 
-    if (inputId.value.trim() === '' || inputFirstname.value.trim() === '' || inputLastname.value.trim() === '' || inputEmail.value.trim() === '' || inputPhone.value.trim() === '' || selectRole.value === 'empty' || inputUserneme.value.trim() === '' || inputPassword.value.trim() === '') {
+    if (inputId.value.trim() === '' || inputFirstname.value.trim() === '' || inputLastname.value.trim() === '' || inputEmail.value.trim() === '' || inputPhone.value.trim() === '' || selectRole.value === 'empty' || inputUsername.value.trim() === '' || inputPassword.value.trim() === '') {
         alert('لطفا کارد ها را با دقت پر کنید!');
         return null
     }
@@ -151,35 +145,37 @@ const collectUserData = () => {
         return null;
     }
 
-    if (passwordValid && confirmPasswordValid && userNameValid) {
-        return {
-            id: isEdit ? adminID : admins.length + 1,
-            nationalCode: inputId.value.trim(),
-            firstName: inputFirstname.value.trim(),
-            lastName: inputLastname.value.trim(),
-            email: inputEmail.value.trim(),
-            phone: inputPhone.value.trim(),
-            roule: selectRole.value,
-            username: inputUserneme.value.trim(),
-            password: inputPassword.value.trim(),
-            date: now,
-            permissions: {
-                'admin': {
-                    read: $.getElementById('admin-read').checked,
-                    write: $.getElementById('admin-write').checked,
-                    delete: $.getElementById('admin-delete').checked,
-                },
-                'employee': {
-                    read: $.getElementById('employee-read').checked,
-                    write: $.getElementById('employee-write').checked,
-                    delete: $.getElementById('employee-delete').checked,
-                },
-                'support': {
-                    read: $.getElementById('support-read').checked,
-                    write: $.getElementById('support-write').checked,
-                    delete: $.getElementById('support-delete').checked,
-                },
-            }
+    if (!isEdit && (!userNameValid || !passwordValid || !confirmPasswordValid)) {
+        return null;
+    }
+
+    return {
+        id: isEdit ? adminID : admins.length + 1,
+        nationalCode: inputId.value.trim(),
+        firstName: inputFirstname.value.trim(),
+        lastName: inputLastname.value.trim(),
+        email: inputEmail.value.trim(),
+        phone: inputPhone.value.trim(),
+        role: selectRole.value,
+        username: inputUsername.value.trim(),
+        password: inputPassword.value.trim(),
+        date: now,
+        permissions: {
+            'admin': {
+                read: $.getElementById('admin-read').checked,
+                write: $.getElementById('admin-write').checked,
+                delete: $.getElementById('admin-delete').checked,
+            },
+            'employee': {
+                read: $.getElementById('employee-read').checked,
+                write: $.getElementById('employee-write').checked,
+                delete: $.getElementById('employee-delete').checked,
+            },
+            'support': {
+                read: $.getElementById('support-read').checked,
+                write: $.getElementById('support-write').checked,
+                delete: $.getElementById('support-delete').checked,
+            },
         }
     }
 };
@@ -205,21 +201,9 @@ const sortAdmins = (admins, sortOrder) => {
         }
     })
 }
-// clear inputs
-const clearInputs = () => {
-    inputId.value = '';
-    inputFirstname.value = '';
-    inputLastname.value = '';;
-    inputEmail.value = '';
-    inputPhone.value = '';
-    selectRole.value = 'empty';
-    inputUserneme.value = '';
-    inputPassword.value = '';
-    inputPasswordConfirm.value = '';
-    passwordValid, confirmPasswordValid, userNameValid = false
-}
+
 // show and close modal add and edit
-const showModal = (nationalCode, firstName, lastName, email, phone, roule, username, password, permissions) => {
+const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions) => {
     modalUserElem.classList.add('show');
     modalUserElem.style.display = 'block';
     modalActiveElem.classList.add('show');
@@ -233,8 +217,8 @@ const showModal = (nationalCode, firstName, lastName, email, phone, roule, usern
         inputLastname.value = lastName;
         inputEmail.value = email;
         inputPhone.value = phone;
-        selectRole.value = roule;
-        inputUserneme.value = username;
+        selectRole.value = role;
+        inputUsername.value = username;
         inputPassword.value = password;
         inputPasswordConfirm.value = password;
 
@@ -259,6 +243,25 @@ const showModal = (nationalCode, firstName, lastName, email, phone, roule, usern
     }
 }
 
+// clear inputs
+const clearInputs = () => {
+    inputId.value = '';
+    inputFirstname.value = '';
+    inputLastname.value = '';;
+    inputEmail.value = '';
+    inputPhone.value = '';
+    selectRole.value = 'empty';
+    inputUsername.value = '';
+    inputPassword.value = '';
+    inputPasswordConfirm.value = '';
+    passwordValid = false;
+    confirmPasswordValid = false;
+    userNameValid = false;
+    rolesTableInput.forEach(role => {
+        role.checked = false;
+    });
+}
+
 const closeModal = () => {
     modalUserElem.classList.remove('show');
     modalUserElem.style.display = 'none';
@@ -281,7 +284,6 @@ const closeDeleteModal = () => {
 }
 
 const generateData = (admins) => {
-    let adminID = localStorage.getItem('adminID')
     if (userContainer) {
         if (admins.length === 0) {
             userContainer.innerHTML = ''
@@ -306,8 +308,8 @@ const generateData = (admins) => {
                              <td class="user-create-date">
                               ${admin.date}
                              </td>
-                             <td class="user-roule">
-                               ${admin.roule === 'super-admin' ? 'مدیر محصول' : admin.roule === 'admin' ? 'مدیر' : admin.roule === 'employee' ? 'کارمند' : admin.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'}
+                             <td class="user-role">
+                               ${admin.role === 'super-admin' ? 'مدیر محصول' : admin.role === 'admin' ? 'مدیر' : admin.role === 'employee' ? 'کارمند' : admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'}
                              </td>
                              <td class="action">
                                  <i class="fa fa-pencil mx-0 cursor-pointer" onclick="editModal(${admin.id})"></i>
@@ -334,7 +336,7 @@ const generateData = (admins) => {
                  </tr>`);
                 }
             });
-            limitations(admins, adminID)
+            limitations()
         }
     }
 }
@@ -350,7 +352,7 @@ const editModal = (adminId) => {
             return userAdmin.id === adminID;
         });
         if (mainUserAdmin) {
-            showModal(mainUserAdmin.nationalCode, mainUserAdmin.firstName, mainUserAdmin.lastName, mainUserAdmin.email, mainUserAdmin.phone, mainUserAdmin.roule, mainUserAdmin.username, mainUserAdmin.password, mainUserAdmin.permissions);
+            showModal(mainUserAdmin.nationalCode, mainUserAdmin.firstName, mainUserAdmin.lastName, mainUserAdmin.email, mainUserAdmin.phone, mainUserAdmin.role, mainUserAdmin.username, mainUserAdmin.password, mainUserAdmin.permissions);
         }
     }
 }
@@ -374,17 +376,22 @@ const showMenu = () => {
 const closeMenu = () => {
     userMenuElem.classList.add('d-none');
 }
-const limitations = (admins, adminId) => {
+const limitations = () => {
     let actions;
     let actionsTrash;
-    let mainUserLogin = admins.filter(admin => admin.id === Number(adminId));
+
+    let admins = getAdminsFromLocalStorage();
+    let adminID = localStorage.getItem('adminID');
+
+    let mainUserLogin = admins.filter(admin => admin.id === Number(adminID));
+
     mainUserLogin.forEach(admin => {
         if (rolesTable) {
             rolesTable.style.display = 'none';
         }
 
         if (btnAddUserElem) {
-            if (admin.roule === 'employee' || admin.roule === 'support') {
+            if (admin.role === 'employee' || admin.role === 'support') {
                 btnAddUserElem.style.display = 'none';
                 $.querySelector('.head-actions').style.display = 'none';
                 searchInputElem.parentElement.classList.replace('w-60', 'w-70')
@@ -456,9 +463,12 @@ btnAddOrEdit?.addEventListener('click', () => {
         let allAdmins = getAdminsFromLocalStorage();
         let userIndex = allAdmins.findIndex(admin => admin.id === adminID);
         if (userIndex !== -1) {
+            console.log(userIndex)
+            console.log(allAdmins[userIndex])
             let updatedUser = collectUserData();
+            console.log(updatedUser)
             if (updatedUser) {
-                allAdmins[userIndex] = updatedUser
+                allAdmins[userIndex] = updatedUser;
                 setAdminsToLocalStorage(allAdmins);
                 generateData(allAdmins);
                 closeModal();
@@ -512,8 +522,8 @@ editProfile.addEventListener('click', () => {
             return admin.id === +adminId;
         });
         if (mainAdmin) {
-            editModal(mainAdmin.id, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.roule, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
-            showModal(mainAdmin.nationalCode, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.roule, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
+            editModal(mainAdmin.id, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.role, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
+            showModal(mainAdmin.nationalCode, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.role, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
         }
     }
 });
@@ -522,7 +532,7 @@ editProfile.addEventListener('click', () => {
 orderByElem?.addEventListener('click', () => {
     let admins = getAdminsFromLocalStorage();
     sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-    const sortedAdmins = sortAdmins(admins, sortOrder)
+    const sortedAdmins = sortAdmins(admins, sortOrder);
     generateData(sortedAdmins);
 });
 
@@ -566,10 +576,10 @@ window.addEventListener('load', () => {
         mainUserLogin.forEach(owner => {
             titleHeader.innerHTML = `سلام ${owner.firstname}`
             userTitle.innerHTML = `${owner.firstname} ${owner.lastname}`;
-            userRoul.innerHTML = owner.roule === 'super-admin' ? 'مدیر محصول' :
-                owner.roule === 'admin' ? 'مدیر' :
-                    owner.roule === 'employee' ? 'کارمند' :
-                        owner.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
+            userRoul.innerHTML = owner.role === 'super-admin' ? 'مدیر محصول' :
+                owner.role === 'admin' ? 'مدیر' :
+                    owner.role === 'employee' ? 'کارمند' :
+                        owner.role === 'support' ? 'پشتیبان' : 'کاربر عادی'
             userProfile.setAttribute('src', owner.image)
         });
         return;
@@ -581,9 +591,9 @@ window.addEventListener('load', () => {
         mainUserLogin.forEach(admin => {
             titleHeader.innerHTML = `سلام ${admin.firstName}`
             userTitle.innerHTML = `${admin.firstName} ${admin.lastName}`;
-            userRoul.innerHTML = admin.roule === 'super-admin' ? 'مدیر محصول' : admin.roule === 'admin' ? 'مدیر' : admin.roule === 'employee' ? 'کارمند' : admin.roule === 'support' ? 'پشتیبان' : 'کاربر عادی'
+            userRoul.innerHTML = admin.role === 'super-admin' ? 'مدیر محصول' : admin.role === 'admin' ? 'مدیر' : admin.role === 'employee' ? 'کارمند' : admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'
         });
-        limitations(admins, adminId);
+        limitations();
         return;
     }
     location.href = `${baseUrl}/login.html`;

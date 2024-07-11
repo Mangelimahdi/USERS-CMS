@@ -39,11 +39,13 @@ const getMessageFromLocalStorage = () => {
 const displayMessages = (messages) => {
     let adminID = localStorage.getItem('adminID');
     let ownerID = localStorage.getItem('ownerID');
+
     if (messages.length === 0) {
         messageElem.innerHTML = ''
         messageElem.insertAdjacentHTML('beforeend', `
             <h1 class="users-empty text-center w-100">پیامی وجود ندارد</h1>
         `);
+
     } else {
         messageElem.innerHTML = ''
         messages.forEach(message => {
@@ -65,6 +67,10 @@ const displayMessages = (messages) => {
                     <span class="position-relative mx-0">
                         <i class="delete-icon fa fa-ellipsis-h cursor-pointer" onclick="showBox(this)"></i>
                         <span class="message-action position-absolute d-none">
+                            <span class="message-delete cursor-pointer d-flex align-center gap-0-2" onclick="deleteMessage(${message.senderId})">
+                                <i class="fa fa-trash"></i>
+                                حذف
+                            </span>
                             <span class="message-delete cursor-pointer d-flex align-center gap-0-2" onclick="deleteMessage(${message.senderId})">
                                 <i class="fa fa-trash"></i>
                                 حذف
@@ -102,7 +108,7 @@ const showBox = (el) => {
     el.nextElementSibling.classList.remove('d-none');
     document.addEventListener('click', (event) => {
         if (event.target.tagName != 'I' || event.target != el) {
-            el.nextElementSibling.classList.add('d-none')
+            el.nextElementSibling.classList.add('d-none');
         }
     });
 }

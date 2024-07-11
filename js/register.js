@@ -192,7 +192,7 @@ submitBtn.addEventListener('click', (event) => {
                 password: passwordInput.value.trim(),
                 username: usernameInput.value.trim(),
                 image: getImage,
-                roule: 'super-admin',
+                role: 'super-admin',
             }
             owner.push(newUser);
             setAdminInLocalStorage(owner);

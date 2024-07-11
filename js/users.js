@@ -18,7 +18,7 @@ const ownerCounter = () => {
 const adminCounter = () => {
     if(getAdmins){
         let adminFilter = getAdmins.filter(admin => {
-            return admin.roule === 'admin'
+            return admin.role === 'admin'
         })
         if (adminFilter) {
             adminCount.innerHTML = adminFilter.length
@@ -31,7 +31,7 @@ const adminCounter = () => {
 const employeeCounter = () => {
     if(getAdmins){
         let employeeFilter = getAdmins.filter(employee => {
-            return employee.roule === 'employee';
+            return employee.role === 'employee';
         });
         if (employeeFilter) {
             employeeCount.innerHTML = employeeFilter.length
@@ -43,7 +43,7 @@ const employeeCounter = () => {
 const supportCounter = () => {
     if(getAdmins){
         let supportFilter = getAdmins.filter(support => {
-            return support.roule === 'support';
+            return support.role === 'support';
         });
         if (supportFilter) {
             supportCount.innerHTML = supportFilter.length
