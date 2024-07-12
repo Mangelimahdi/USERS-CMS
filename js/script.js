@@ -167,49 +167,45 @@ const collectUserData = () => {
     let imageUrl = imagePreview.src
     if (inputId.value.trim() === '' || inputFirstname.value.trim() === '' || inputLastname.value.trim() === '' || inputEmail.value.trim() === '' || inputPhone.value.trim() === '' || selectRole.value === 'empty' || inputUsername.value.trim() === '' || inputPassword.value.trim() === '') {
         alert('لطفا کارد ها را با دقت پر کنید!');
-        return null
-    }
 
-    if (inputPassword.value.trim() !== inputConfirmPassword.value.trim()) {
-        alert('رمز عبور تطابق ندارد');
-        return null;
-
-    }
-    if (userNameValid && passwordValid && confirmPasswordValid) {
-        let userData = {
-            id: isEdit ? adminID : admins.length + 1,
-            nationalCode: inputId.value.trim(),
-            firstName: inputFirstname.value.trim(),
-            lastName: inputLastname.value.trim(),
-            email: inputEmail.value.trim(),
-            phone: inputPhone.value.trim(),
-            role: selectRole.value,
-            username: inputUsername.value.trim(),
-            password: inputPassword.value.trim(),
-            image: imageUrl,
-            date: now,
-            permissions: {
-                'admin': {
-                    read: $.getElementById('admin-read').checked,
-                    write: $.getElementById('admin-write').checked,
-                    delete: $.getElementById('admin-delete').checked,
-                },
-                'employee': {
-                    read: $.getElementById('employee-read').checked,
-                    write: $.getElementById('employee-write').checked,
-                    delete: $.getElementById('employee-delete').checked,
-                },
-                'support': {
-                    read: $.getElementById('support-read').checked,
-                    write: $.getElementById('support-write').checked,
-                    delete: $.getElementById('support-delete').checked,
-                },
-            }
-        }
-        return userData
     } else {
-        return null;
+        if (userNameValid && passwordValid && confirmPasswordValid) {
+            let userData = {
+                id: isEdit ? adminID : admins.length + 1,
+                nationalCode: inputId.value.trim(),
+                firstName: inputFirstname.value.trim(),
+                lastName: inputLastname.value.trim(),
+                email: inputEmail.value.trim(),
+                phone: inputPhone.value.trim(),
+                role: selectRole.value,
+                username: inputUsername.value.trim(),
+                password: inputPassword.value.trim(),
+                image: imageUrl,
+                date: now,
+                permissions: {
+                    'admin': {
+                        read: $.getElementById('admin-read').checked,
+                        write: $.getElementById('admin-write').checked,
+                        delete: $.getElementById('admin-delete').checked,
+                    },
+                    'employee': {
+                        read: $.getElementById('employee-read').checked,
+                        write: $.getElementById('employee-write').checked,
+                        delete: $.getElementById('employee-delete').checked,
+                    },
+                    'support': {
+                        read: $.getElementById('support-read').checked,
+                        write: $.getElementById('support-write').checked,
+                        delete: $.getElementById('support-delete').checked,
+                    },
+                }
+            }
+            return userData;
+        } else {
+            alert('اطلاعات با دقت وارد کنید🙏')
+        }
     }
+
 };
 
 const newUser = () => {
