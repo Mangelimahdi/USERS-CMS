@@ -524,6 +524,7 @@ button {
 option {
   font-size: 14px;
 }
+
 /* choose Image */
 .input-group-choose {
   position: relative;
@@ -531,7 +532,7 @@ option {
   padding: 12px;
   margin: 5px auto;
   height: 100px;
-  width:100px;
+  width: 100px;
 }
 
 .visually-hidden {
@@ -541,11 +542,13 @@ option {
   overflow: hidden;
   clip: rect(1px, 1px, 1px, 1px);
 }
-.empty{
+
+.empty {
   font-size: 13px;
   text-align: center;
   color: var(--gray);
 }
+
 .set-table tbody tr td:first-child {
   font-size: 12px;
   color: var(--title-color2);
@@ -617,6 +620,29 @@ option {
   font-size: 20px;
   color: var(--text-color2);
   font-weight: bold;
+}
+
+.container-photos {
+  padding: 20px;
+}
+
+.container-photos .box-photo {
+  border:1px solid var(--border-color);
+  width: 300px;
+  height: 300px;
+}
+
+.box-photo .user-image {
+  padding: 10px;
+  display: block;
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+}
+
+.box-photo .info {
+  /* padding: 20px; */
+  border-top: 1px solid var(--border-color);
 }
 
 /* validation message */
@@ -887,6 +913,7 @@ option {
   .container {
     padding: 30px 20px;
   }
+
   .w-sm-50 {
     width: 50% !important;
   }

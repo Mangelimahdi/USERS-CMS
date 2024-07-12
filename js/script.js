@@ -680,7 +680,7 @@ showMenuElem.addEventListener('click', () => {
     })
 });
 
-closeModalElem.addEventListener('click', () => {
+closeModalElem?.addEventListener('click', () => {
     closeModal();
 });
 
@@ -735,6 +735,7 @@ exitPanel.addEventListener('click', () => {
 
 window.addEventListener('load', () => {
     const admins = getAdminsFromLocalStorage();
+    const baseUrl = getBaseUrl();
     let ownerId = localStorage.getItem('ownerID');
     let adminId = localStorage.getItem('adminID');
     let owner = getOwnerFromLocalStorage()
@@ -744,7 +745,6 @@ window.addEventListener('load', () => {
     employeeCounter();
     supportCounter();
 
-    const baseUrl = getBaseUrl();
 
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
         location.href = `${baseUrl}/register.html`;
@@ -764,7 +764,7 @@ window.addEventListener('load', () => {
                 owner.role === 'admin' ? 'مدیر' :
                     owner.role === 'employee' ? 'کارمند' :
                         owner.role === 'support' ? 'پشتیبان' : 'کاربر عادی'
-            userProfile.setAttribute('src', owner.image)
+            userProfile.setAttribute('src', owner.image);
         });
         return;
     }
@@ -775,8 +775,8 @@ window.addEventListener('load', () => {
         mainUserLogin.forEach(admin => {
             titleHeader.innerHTML = `سلام ${admin.firstName}`
             userTitle.innerHTML = `${admin.firstName} ${admin.lastName}`;
-            userRoul.innerHTML = admin.role === 'super-admin' ? 'مدیر محصول' : admin.role === 'admin' ? 'مدیر' : admin.role === 'employee' ? 'کارمند' : admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'
-            userProfile.setAttribute('src', admin.image)
+            userRoul.innerHTML = admin.role === 'super-admin' ? 'مدیر محصول' : admin.role === 'admin' ? 'مدیر' : admin.role === 'employee' ? 'کارمند' : admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی';
+            userProfile.setAttribute('src', admin.image);
         });
         limitations();
         return;
@@ -785,7 +785,7 @@ window.addEventListener('load', () => {
     location.href = `${baseUrl}/login.html`;
 });
 
-inputGroupChoose.addEventListener('dragenter', dragEnter, false);
-inputGroupChoose.addEventListener('dragover', dragOver, false);
-inputGroupChoose.addEventListener('drop', drop, false);
-chooseImage.addEventListener('change', (event) => { selectImageByClick(event, this) }, false)
+inputGroupChoose?.addEventListener('dragenter', dragEnter, false);
+inputGroupChoose?.addEventListener('dragover', dragOver, false);
+inputGroupChoose?.addEventListener('drop', drop, false);
+chooseImage?.addEventListener('change', (event) => { selectImageByClick(event, this) }, false)
