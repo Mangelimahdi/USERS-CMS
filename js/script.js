@@ -452,21 +452,13 @@ const generateData = (admins) => {
 }
 
 // show edit modal
-const editModal = (adminId) => {    
-    // validateInputs();
-    // if (validateInputs()) {
-        passwordValid = true;
-        confirmPasswordValid = true;
-        userNameValid = true;
-        imageValid=true
-    // }
-    // else{
-    //     passwordValid = false;
-    //     confirmPasswordValid = false;
-    //     userNameValid = false;
-    //     imageValid=false
-    // }
+const editModal = (adminId) => {
     isEdit = true;
+    passwordValid = true;
+    confirmPasswordValid = true;
+    userNameValid = true;
+    imageValid = true;
+    
     adminID = adminId;
 
     if (adminID) {
