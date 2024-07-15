@@ -591,7 +591,6 @@ const limitations = () => {
     })
 }
 
-
 // base url
 const getBaseUrl = () => {
     let hostName = window.location.hostname;
