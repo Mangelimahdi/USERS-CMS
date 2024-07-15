@@ -231,10 +231,12 @@ const sortAdmins = (admins, sortOrder) => {
 
 const searchUsers = (event) => {
     let admins = getAdminsFromLocalStorage();
+    let owner = getOwnerFromLocalStorage();
     let filterUsers = admins.filter((admin) => {
         return admin.nationalCode.includes(event.target.value) || admin.firstName.includes(event.target.value) || admin.lastName.includes(event.target.value);
     })
-    generateData(filterUsers)
+
+    generateData(filterUsers);
 }
 
 // admins count
@@ -450,7 +452,20 @@ const generateData = (admins) => {
 }
 
 // show edit modal
-const editModal = (adminId) => {
+const editModal = (adminId) => {    
+    // validateInputs();
+    // if (validateInputs()) {
+        passwordValid = true;
+        confirmPasswordValid = true;
+        userNameValid = true;
+        imageValid=true
+    // }
+    // else{
+    //     passwordValid = false;
+    //     confirmPasswordValid = false;
+    //     userNameValid = false;
+    //     imageValid=false
+    // }
     isEdit = true;
     adminID = adminId;
 
@@ -600,15 +615,15 @@ const getBaseUrl = () => {
         return "/USERS-CMS"
     }
 }
+
 // photos
-const photos = () => {
-    const getAdmins = getAdminsFromLocalStorage();
-    const getOwner = getOwnerFromLocalStorage();
+const photos = (admins, owner) => {
+
     let box = '';
     if (containerPhotosElem) {
         containerPhotosElem.innerHTML = ''
-        if (getAdmins) {
-            getAdmins.forEach(admin => {
+        if (admins) {
+            admins.forEach(admin => {
                 box = `
                 <div class="box-photo rounded-8">
                 <img src="${admin.image}" class="user-image">
@@ -620,9 +635,9 @@ const photos = () => {
                 <span class="user-role d-flex align-center">
                 <i class="fa fa-briefcase"></i>
                 ${admin.role === 'super-admin' ? 'مدیر محصول' :
-                admin.role === 'admin' ? 'مدیر' :
-                    admin.role === 'employee' ? 'کارمند' :
-                        admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'}
+                        admin.role === 'admin' ? 'مدیر' :
+                            admin.role === 'employee' ? 'کارمند' :
+                                admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'}
                 </span>
                 </div>
                 </div>
@@ -631,16 +646,15 @@ const photos = () => {
             })
         }
 
-        if (getOwner) {
-            getOwner.forEach(owner => {
-                console.log(owner.role)
+        if (owner) {
+            owner.forEach(owner => {
                 box = `
                 <div class="box-photo rounded-8">
                 <img src="${owner.image}" class="user-image">
                 <div class="user-infos d-flex justify-between align-center">
                 <span class="user-fullname d-flex align-center">
                 <i class="fa fa-user"></i>
-                ${owner.firstname} ${owner.lastname};
+                ${owner.firstname} ${owner.lastname}
                 </span>
                 <span class="user-role d-flex align-center">
                 <i class="fa fa-briefcase"></i>
@@ -796,7 +810,7 @@ window.addEventListener('load', () => {
     adminCounter();
     employeeCounter();
     supportCounter();
-    photos();
+    photos(admins, owner);
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
         location.href = `${baseUrl}/register.html`;
         return;
