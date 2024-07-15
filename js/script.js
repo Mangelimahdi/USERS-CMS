@@ -46,7 +46,7 @@ const inputGroupChoose = $.querySelector('.input-group-choose');
 const chooseImage = $.querySelector('#choose-image');
 const imagePreview = $.querySelector('.prev-img');
 
-let passwordValid = false, confirmPasswordValid = false, userNameValid = false, imageValid = false
+let passwordValid, confirmPasswordValid, userNameValid, imageValid;
 let admins = [];
 let adminID = null;
 let isEdit = false;
@@ -80,7 +80,6 @@ const usernameIsAvailable = () => {
         let findAdminUsername = admins.find(admin => {
             return admin.username === inputUsername.value.trim();
         });
-
         let findOwnerUsername = owner.find(owner => {
             return owner.username === inputUsername.value.trim();
         })
@@ -92,16 +91,16 @@ const usernameIsAvailable = () => {
 const validateUsername = () => {
     let usernameValue = inputUsername.value.trim();
     if (usernameValue.length < 8) {
-        userNameValid = false;
         usernameMessage.innerHTML = 'نام کاربری حداقل 8 کاراکتر باشد';
         usernameMessage.classList.remove('valid-message');
         usernameMessage.classList.add('invalid-message');
+        userNameValid = false;
     }
     else if (!usernameIsAvailable()) {
-        userNameValid = false;
         usernameMessage.innerHTML = 'نام کاربری قبلا استفاده شده است!';
         usernameMessage.classList.remove('valid-message');
         usernameMessage.classList.add('invalid-message');
+        userNameValid = false;
     }
     else {
         usernameMessage.innerHTML = 'نام کاربری معتبر است';
@@ -114,16 +113,16 @@ const validateUsername = () => {
 const validatePassword = () => {
     let passwordValue = inputPassword.value.trim();
     if (passwordValue.length < 8) {
-        passwordValid = false;
         passwordMessage.innerHTML = 'رمز عبور حداقل 8 کاراکتر باشد';
         passwordMessage.classList.remove('valid-message');
         passwordMessage.classList.add('invalid-message');
+        passwordValid = false;
     }
     else {
-        passwordValid = true;
         passwordMessage.innerHTML = 'رمز عبور معتبر است';
         passwordMessage.classList.remove('invalid-message');
         passwordMessage.classList.add('valid-message');
+        passwordValid = true;
     }
 }
 
@@ -131,22 +130,29 @@ const validateConfirmPassword = () => {
     let confirmPasswordValue = inputConfirmPassword.value.trim();
     let passwordValue = inputPassword.value.trim();
     if (confirmPasswordValue.length < 8) {
-        confirmPasswordValid = false;
         confirmPasswordMessage.innerHTML = 'تکرار رمز عبور حداقل 8 کاراکتر باشد';
         confirmPasswordMessage.classList.remove('valid-message');
         confirmPasswordMessage.classList.add('invalid-message');
-    } else if (confirmPasswordValue != passwordValue) {
         confirmPasswordValid = false;
+    } else if (confirmPasswordValue != passwordValue) {
         confirmPasswordMessage.innerHTML = 'رمز عبور و تکرار آن یکسان نیست!';
         confirmPasswordMessage.classList.remove('valid-message');
         confirmPasswordMessage.classList.add('invalid-message');
+        confirmPasswordValid = false;
     }
     else {
-        confirmPasswordValid = true;
         confirmPasswordMessage.innerHTML = 'رمز عبور معتبر است';
         confirmPasswordMessage.classList.remove('invalid-message');
         confirmPasswordMessage.classList.add('valid-message');
+        confirmPasswordValid = true;
     }
+}
+
+const validateInputs = () => {
+    validatePassword();
+    validateConfirmPassword();
+    validateUsername();
+    return passwordValid && confirmPasswordValid && userNameValid && imageValid;
 }
 
 inputPassword?.addEventListener('keyup', (event) => {
@@ -164,52 +170,44 @@ inputUsername?.addEventListener('keyup', (event) => {
 const collectUserData = () => {
     let options = { year: 'numeric', month: 'long', day: 'numeric' };
     let now = new Date().toLocaleDateString('fa-IR', options);
-    let imageUrl = imagePreview.src
-    if (inputId.value.trim() === '' || inputFirstname.value.trim() === '' || inputLastname.value.trim() === '' || inputEmail.value.trim() === '' || inputPhone.value.trim() === '' || selectRole.value === 'empty' || inputUsername.value.trim() === '' || inputPassword.value.trim() === '') {
-        alert('لطفا کارد ها را با دقت پر کنید!');
+    let imageUrl = imagePreview.src;
 
-    } else {
-        if (userNameValid && passwordValid && confirmPasswordValid) {
-            let userData = {
-                id: isEdit ? adminID : admins.length + 1,
-                nationalCode: inputId.value.trim(),
-                firstName: inputFirstname.value.trim(),
-                lastName: inputLastname.value.trim(),
-                email: inputEmail.value.trim(),
-                phone: inputPhone.value.trim(),
-                role: selectRole.value,
-                username: inputUsername.value.trim(),
-                password: inputPassword.value.trim(),
-                image: imageUrl,
-                date: now,
-                permissions: {
-                    'admin': {
-                        read: $.getElementById('admin-read').checked,
-                        write: $.getElementById('admin-write').checked,
-                        delete: $.getElementById('admin-delete').checked,
-                    },
-                    'employee': {
-                        read: $.getElementById('employee-read').checked,
-                        write: $.getElementById('employee-write').checked,
-                        delete: $.getElementById('employee-delete').checked,
-                    },
-                    'support': {
-                        read: $.getElementById('support-read').checked,
-                        write: $.getElementById('support-write').checked,
-                        delete: $.getElementById('support-delete').checked,
-                    },
-                }
-            }
-            return userData;
-        } else {
-            alert('اطلاعات با دقت وارد کنید🙏')
+    let userData = {
+        id: isEdit ? adminID : admins.length + 1,
+        nationalCode: inputId.value.trim(),
+        firstName: inputFirstname.value.trim(),
+        lastName: inputLastname.value.trim(),
+        email: inputEmail.value.trim(),
+        phone: inputPhone.value.trim(),
+        role: selectRole.value,
+        username: inputUsername.value.trim(),
+        password: inputPassword.value.trim(),
+        image: imageUrl,
+        date: now,
+        permissions: {
+            'admin': {
+                read: $.getElementById('admin-read').checked,
+                write: $.getElementById('admin-write').checked,
+                delete: $.getElementById('admin-delete').checked,
+            },
+            'employee': {
+                read: $.getElementById('employee-read').checked,
+                write: $.getElementById('employee-write').checked,
+                delete: $.getElementById('employee-delete').checked,
+            },
+            'support': {
+                read: $.getElementById('support-read').checked,
+                write: $.getElementById('support-write').checked,
+                delete: $.getElementById('support-delete').checked,
+            },
         }
     }
-
+    return userData;
 };
 
 const newUser = () => {
     let newUserObj = collectUserData();
+    console.log(newUserObj)
     if (newUserObj) {
         admins.push(newUserObj);
         setAdminsToLocalStorage(admins);
@@ -218,6 +216,7 @@ const newUser = () => {
         closeModal();
     }
 }
+
 // filter users
 const sortAdmins = (admins, sortOrder) => {
     return admins.sort((a, b) => {
@@ -250,7 +249,6 @@ const ownerCounter = () => {
         else {
             ownerCount.innerHTML = 0;
         }
-
     }
 }
 
@@ -307,7 +305,6 @@ const supportCounter = () => {
     }
 }
 
-
 // show and close modal add and edit
 const showModal = (nationalCode, firstName, lastName, email, phone, role, username, password, permissions, image) => {
     modalUserElem.classList.add('show');
@@ -363,6 +360,7 @@ const clearInputs = () => {
     passwordValid = false;
     confirmPasswordValid = false;
     userNameValid = false;
+    imageValid = false;
     usernameMessage.innerHTML = ''
     passwordMessage.innerHTML = ''
     confirmPasswordMessage.innerHTML = ''
@@ -370,6 +368,7 @@ const clearInputs = () => {
     rolesTableInput.forEach(role => {
         role.checked = false;
     });
+    console.log('Inputs cleared');
 }
 
 const closeModal = () => {
@@ -527,7 +526,6 @@ const selectImageByDragging = (files) => {
             reader.readAsDataURL(file)
         }
         imageValid = true;
-
     }
 }
 const selectImageByClick = (event) => {
@@ -573,10 +571,10 @@ const limitations = () => {
                 actions.forEach(action => {
                     action.style.display = 'none';
                 });
+                selectRole.setAttribute('disabled', 'true')
             }
             else {
                 btnAddUserElem.style.display = 'block';
-
                 $.querySelector('.head-actions').style.display = 'table-cell';
 
                 actions = $.querySelectorAll('.action');
@@ -624,37 +622,42 @@ btnDeleteModalDeleteElem?.addEventListener('click', () => {
     }
 });
 
-
 btnAddUserElem?.addEventListener('click', () => {
     isEdit = false;
     showModal();
 });
 
 btnAddOrEdit?.addEventListener('click', () => {
-    validateUsername();
-    validatePassword();
-    validateConfirmPassword();
-    if (isEdit) {
-        let allAdmins = getAdminsFromLocalStorage();
-        let userIndex = allAdmins.findIndex(admin => admin.id === adminID);
-        if (userIndex !== -1) {
-            let updatedUser = collectUserData();
-            if (updatedUser) {
-                allAdmins[userIndex] = updatedUser;
-                setAdminsToLocalStorage(allAdmins);
-                generateData(allAdmins);
-                closeModal();
-                isEdit = false;
+    if (inputId.value.trim() !== '' && inputFirstname.value.trim() !== '' && inputLastname.value.trim() !== '' && inputEmail.value.trim() !== '' && inputPhone.value.trim() !== '' && selectRole.value !== 'empty' && inputUsername.value.trim() !== '' && inputPassword.value.trim() !== '') {
+        if (validateInputs()) {
+            if (isEdit) {
+                let allAdmins = getAdminsFromLocalStorage();
+                let userIndex = allAdmins.findIndex(admin => admin.id === adminID);
+                if (userIndex !== -1) {
+                    let updatedUser = collectUserData();
+                    if (updatedUser) {
+                        allAdmins[userIndex] = updatedUser;
+                        setAdminsToLocalStorage(allAdmins);
+                        generateData(allAdmins);
+                        closeModal();
+                        isEdit = false;
+                    }
+                }
+            } else {
+                newUser();
+                isEdit = true;
             }
+            ownerCounter();
+            adminCounter();
+            employeeCounter();
+            supportCounter();
+        }
+        else {
+            alert('لطفا اطلاعات معتبر وارد کنید')
         }
     } else {
-        newUser();
-        isEdit = true;
+        alert('لطفا همه کادر ها را پر کنید!')
     }
-    ownerCounter();
-    adminCounter();
-    employeeCounter();
-    supportCounter();
 });
 
 closeModalDeleteElem?.addEventListener("click", () => {
@@ -689,17 +692,15 @@ window.addEventListener('keyup', (event) => {
 
 editProfile.addEventListener('click', () => {
     isEdit = true;
-
     let allAdmins = getAdminsFromLocalStorage();
     let adminId = localStorage.getItem('adminID');
-
     if (adminId) {
         let mainAdmin = allAdmins.find(admin => {
             return admin.id === +adminId;
         });
         if (mainAdmin) {
-            editModal(mainAdmin.id, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.role, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
-            showModal(mainAdmin.nationalCode, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.role, mainAdmin.username, mainAdmin.password, mainAdmin.permissions)
+            editModal(mainAdmin.id, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.role, mainAdmin.username, mainAdmin.password, mainAdmin.permissions, mainAdmin.image)
+            showModal(mainAdmin.nationalCode, mainAdmin.firstName, mainAdmin.lastName, mainAdmin.email, mainAdmin.phone, mainAdmin.role, mainAdmin.username, mainAdmin.password, mainAdmin.permissions, mainAdmin.image)
         }
     }
 });
@@ -760,7 +761,7 @@ window.addEventListener('load', () => {
                 owner.role === 'admin' ? 'مدیر' :
                     owner.role === 'employee' ? 'کارمند' :
                         owner.role === 'support' ? 'پشتیبان' : 'کاربر عادی'
-            userProfile.setAttribute('src', owner.image);
+            userProfile.setAttribute('src', owner.image)
         });
         return;
     }
@@ -772,7 +773,7 @@ window.addEventListener('load', () => {
             titleHeader.innerHTML = `سلام ${admin.firstName}`
             userTitle.innerHTML = `${admin.firstName} ${admin.lastName}`;
             userRoul.innerHTML = admin.role === 'super-admin' ? 'مدیر محصول' : admin.role === 'admin' ? 'مدیر' : admin.role === 'employee' ? 'کارمند' : admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی';
-            userProfile.setAttribute('src', admin.image);
+            userProfile.setAttribute('src', admin.image)
         });
         limitations();
         return;
