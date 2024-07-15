@@ -26,7 +26,7 @@ template.innerHTML = `
             </li>
             <li class="list-item">
                 <i class="fa fa-photo"></i>
-                <a href="#">عکس ها</a>
+                <a href="photos.html">عکس ها</a>
             </li>
             <li class="list-item">
                 <i class="fa fa-cubes"></i>

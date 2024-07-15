@@ -627,9 +627,9 @@ option {
 }
 
 .container-photos .box-photo {
-  border:1px solid var(--border-color);
+  border: 1px solid var(--border-color);
   width: 300px;
-  height: 300px;
+  /* height: 300px; */
 }
 
 .box-photo .user-image {
@@ -640,9 +640,15 @@ option {
   height: 100px;
 }
 
-.box-photo .info {
-  /* padding: 20px; */
+.box-photo .user-infos {
+  padding: 20px;
   border-top: 1px solid var(--border-color);
+}
+
+.user-fullname,
+.user-role {
+  color: var(--text-color2);
+  gap: 8px;
 }
 
 /* validation message */

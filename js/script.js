@@ -45,6 +45,7 @@ const supportCount = $.querySelector(".support-count");
 const inputGroupChoose = $.querySelector('.input-group-choose');
 const chooseImage = $.querySelector('#choose-image');
 const imagePreview = $.querySelector('.prev-img');
+const containerPhotosElem = $.querySelector('.container-photos');
 
 let passwordValid, confirmPasswordValid, userNameValid, imageValid;
 let admins = [];
@@ -207,7 +208,6 @@ const collectUserData = () => {
 
 const newUser = () => {
     let newUserObj = collectUserData();
-    console.log(newUserObj)
     if (newUserObj) {
         admins.push(newUserObj);
         setAdminsToLocalStorage(admins);
@@ -368,7 +368,6 @@ const clearInputs = () => {
     rolesTableInput.forEach(role => {
         role.checked = false;
     });
-    console.log('Inputs cleared');
 }
 
 const closeModal = () => {
@@ -528,6 +527,7 @@ const selectImageByDragging = (files) => {
         imageValid = true;
     }
 }
+
 const selectImageByClick = (event) => {
     const files = event.target.files;
     if (!files.length) {
@@ -588,7 +588,7 @@ const limitations = () => {
                 });
             }
         }
-    })
+    });
 }
 
 // base url
@@ -599,6 +599,63 @@ const getBaseUrl = () => {
     } else {
         return "/USERS-CMS"
     }
+}
+// photos
+const photos = () => {
+    const getAdmins = getAdminsFromLocalStorage();
+    const getOwner = getOwnerFromLocalStorage();
+    let box = '';
+    if (containerPhotosElem) {
+        containerPhotosElem.innerHTML = ''
+        if (getAdmins) {
+            getAdmins.forEach(admin => {
+                box = `
+                <div class="box-photo rounded-8">
+                <img src="${admin.image}" class="user-image">
+                <div class="user-infos d-flex justify-between align-center">
+                <span class="user-fullname d-flex align-center">
+                <i class="fa fa-user"></i>
+                ${admin.firstName} ${admin.lastName}
+                </span>
+                <span class="user-role d-flex align-center">
+                <i class="fa fa-briefcase"></i>
+                ${admin.role === 'super-admin' ? 'مدیر محصول' :
+                admin.role === 'admin' ? 'مدیر' :
+                    admin.role === 'employee' ? 'کارمند' :
+                        admin.role === 'support' ? 'پشتیبان' : 'کاربر عادی'}
+                </span>
+                </div>
+                </div>
+                `
+                containerPhotosElem.insertAdjacentHTML('beforeend', box)
+            })
+        }
+
+        if (getOwner) {
+            getOwner.forEach(owner => {
+                console.log(owner.role)
+                box = `
+                <div class="box-photo rounded-8">
+                <img src="${owner.image}" class="user-image">
+                <div class="user-infos d-flex justify-between align-center">
+                <span class="user-fullname d-flex align-center">
+                <i class="fa fa-user"></i>
+                ${owner.firstname} ${owner.lastname};
+                </span>
+                <span class="user-role d-flex align-center">
+                <i class="fa fa-briefcase"></i>
+                ${owner.role === 'super-admin' ? 'مدیر محصول' :
+                        owner.role === 'admin' ? 'مدیر' :
+                            owner.role === 'employee' ? 'کارمند' :
+                                owner.role === 'support' ? 'پشتیبان' : 'کاربر عادی'}
+                </span>
+                </div>
+                </div>`
+                containerPhotosElem.insertAdjacentHTML('beforeend', box)
+            })
+        }
+    }
+
 }
 // events
 btnCloseModalElem?.addEventListener('click', closeModal);
@@ -728,7 +785,6 @@ exitPanel.addEventListener('click', () => {
     location.href = `${baseUrl}/login.html`;
 })
 
-
 window.addEventListener('load', () => {
     const admins = getAdminsFromLocalStorage();
     const baseUrl = getBaseUrl();
@@ -740,8 +796,7 @@ window.addEventListener('load', () => {
     adminCounter();
     employeeCounter();
     supportCounter();
-
-
+    photos();
     if (!ownerId && (!owner || owner.length === 0) && !adminId) {
         location.href = `${baseUrl}/register.html`;
         return;
